@@ -38,7 +38,8 @@
       "palm_sugar",
       "peanut",
       "salted_egg",
-      "tomato"
+      "tomato",
+      "dried_shrimp"
     ],
     "somtam_poo_plara": [
       "papaya",
@@ -247,7 +248,7 @@
       "palm_sugar",
       "holy_basil"
     ],
-    "seafood": [
+    "seafood_basil": [
       "shrimp",
       "squid",
       "basil",
@@ -255,7 +256,7 @@
       "garlic",
       "soy_sauce"
     ],
-    "braised_chicken": [
+    "braised_chicken_basil": [
       "chicken",
       "basil",
       "chili",
@@ -273,7 +274,7 @@
   },
 
   "tom_kha_gai": {
-    "classic": [
+    "tom_kha_gai_classic": [
       "chicken",
       "galangal",
       "lemongrass",
@@ -283,7 +284,7 @@
       "palm_sugar",
       "lime"
     ],
-    "chicken_blood": [
+    "tom_kha_gai_chicken_blood": [
       "chicken",
       "chicken_blood",
       "galangal",
@@ -293,7 +294,7 @@
       "lime",
       "bird_eye_chili"
     ],
-    "chicken_mushroom": [
+    "tom_kha_gai_chicken_mushroom": [
       "chicken_thigh",
       "straw_mushroom",
       "kaffir_lime_leaf",
@@ -301,7 +302,7 @@
       "fish_sauce",
       "lime"
     ],
-    "seafood": [
+    "tom_kha_gai_seafood": [
       "shrimp",
       "squid",
       "galangal",
@@ -313,7 +314,7 @@
   },
 
   "larb": {
-    "classic_pork": [
+    "larb_classic_pork": [
       "pork",
       "roasted_rice_powder",
       "chili_flakes",
@@ -322,7 +323,7 @@
       "shallot",
       "culantro"
     ],
-    "northern_larb_pork": [
+    "larb_northern_pork": [
       "pork",
       "northern_larb_spice",
       "pork_liver",
@@ -330,7 +331,7 @@
       "phak_phai",
       "green_onion"
     ],
-    "pork_larb_offal": [
+    "larb_pork_offal": [
       "pork",
       "pork_liver",
       "pork_intestine",
@@ -339,7 +340,7 @@
       "roasted_rice_powder",
       "lime_juice"
     ],
-    "pork_larb_seasoning_sauce": [
+    "larb_pork_seasoning_sauce": [
       "pork",
       "seasoning_sauce",
       "roasted_rice_powder",
@@ -347,7 +348,7 @@
       "green_onion",
       "mint"
     ],
-    "chicken_larb": [
+    "larb_chicken": [
       "chicken",
       "roasted_rice_powder",
       "chili_flakes",
@@ -358,7 +359,7 @@
   },
 
   "sukiyaki": {
-    "seafood_dry": [
+    "sukiyaki_seafood_dry": [
       "shrimp",
       "squid",
       "glass_noodle",
@@ -367,7 +368,7 @@
       "morning_glory",
       "sukiyaki_sauce"
     ],
-    "pork_soup": [
+    "sukiyaki_pork_soup": [
       "pork",
       "egg",
       "morning_glory",
@@ -375,7 +376,7 @@
       "chicken_broth",
       "sukiyaki_sauce"
     ],
-    "mixed_soup": [
+    "sukiyaki_mixed_soup": [
       "pork",
       "shrimp",
       "fish_ball",
@@ -384,7 +385,7 @@
       "broth",
       "sukiyaki_sauce"
     ],
-    "chicken_dry": [
+    "sukiyaki_chicken_dry": [
       "chicken",
       "glass_noodle",
       "cabbage",
@@ -394,7 +395,7 @@
   },
   
   "sour_curry": {
-    "mixed_vegetable_shrimp": [
+    "sour_curry_mixed_vegetable_shrimp": [
       "napa_cabbage",
       "long_bean",
       "carrot",
@@ -402,21 +403,21 @@
       "sour_curry_paste",
       "tamarind_paste"
     ],
-    "southern_fish": [
+    "sour_curry_southern_fish": [
       "sea_bass",
       "young_coconut_shoot",
       "southern_sour_curry_paste",
       "shrimp_paste",
       "lime"
     ],
-    "papaya_shrimp": [
+    "sour_curry_papaya_shrimp": [
       "green_papaya",
       "shrimp",
       "ground_fish",
       "sour_curry_paste",
       "tamarind_paste"
     ],
-    "drumstick_fish": [
+    "sour_curry_drumstick_fish": [
       "drumstick_pod",
       "snakehead_fish",
       "fingerroot",
@@ -424,7 +425,7 @@
       "fish_sauce",
       "palm_sugar"
     ],
-    "vegetarian": [
+    "sour_curry_vegetarian": [
       "oyster_mushroom",
       "firm_tofu",
       "vegetarian_sour_curry_paste",
@@ -435,7 +436,7 @@
   },
 
   "massaman_curry": {
-    "beef_shank": [
+    "massaman_beef_shank": [
       "beef_shank",
       "massaman_curry_paste",
       "coconut_milk",
@@ -444,7 +445,7 @@
       "cardamom",
       "peanut"
     ],
-    "chicken_classic": [
+    "massaman_chicken_classic": [
       "chicken_thigh",
       "potato",
       "onion",
@@ -452,20 +453,20 @@
       "roasted_peanut",
       "massaman_curry_paste"
     ],
-    "premium_chicken": [
+    "massaman_premium_chicken": [
       "chicken",
       "massaman_curry_paste",
       "coconut_milk",
       "spice_mix"
     ],
-    "pork_belly": [
+    "massaman_pork_belly": [
       "pork_belly",
       "potato",
       "onion",
       "massaman_curry_paste",
       "coconut_milk"
     ],
-    "quick_chicken": [
+    "massaman_quick_chicken": [
       "chicken_drumette",
       "potato",
       "massaman_curry_paste",
