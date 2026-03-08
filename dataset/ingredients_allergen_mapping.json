@@ -14,6 +14,8 @@
     "sea_bass":                  ["fish"],
     "snakehead_fish":            ["fish"],
     "ground_fish":               ["fish"],
+    "salmon":                    ["fish"],
+    "tuna":                      ["fish"],
     "fish_ball":                 ["fish", "wheat"],
     "fish_sauce":                ["fish", "shellfish"],
     "fermented_fish_sauce":      ["fish"],
@@ -54,6 +56,7 @@
     "palm_sugar":                  [],
     "sugar":                       [],
     "coconut_sugar":               [],
+    "bamboo_shoot":                [],
     "tomato":                      [],
     "yardlong_bean":               [],
     "rice_noodle":                 [],
@@ -83,6 +86,7 @@
     "fingerroot":                  [],
     "beef":                        [],
     "beef_shank":                  [],
+    "duck":                        [],
     "chicken":                     [],
     "chicken_thigh":               [],
     "chicken_drumette":            [],
@@ -91,6 +95,9 @@
     "pork_liver":                  [],
     "pork_skin":                   [],
     "pork_intestine":              [],
+    "crispy_pork":                 [],
+    "bacon":                       [],
+    "corn":                        [],
     "roasted_rice_powder":         [],
     "mint":                        [],
     "green_onion":                 [],
@@ -110,6 +117,8 @@
     "potato":                      [],
     "cinnamon":                    [],
     "cardamom":                    [],
-    "spice_mix":                   []
+    "spice_mix":                   [],
+    "apple":                       [],
+    "green_mango":                 []
   }
 }
