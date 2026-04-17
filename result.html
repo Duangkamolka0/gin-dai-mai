@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ผลการวิเคราะห์</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg" onload="renderResult()">
+  <header class="navbar">
+    <div class="logo">GINDAIMAI</div>
+    <div class="nav-link-group">
+      <div class="nav-link" onclick="location.href='index.html'">หน้าหลัก</div>
+    </div>
+    <!--
+    <div class="profile">
+      <img src="assets/proflie.png" alt="profile">
+    </div> 
+    -->
+  </header>
+
+  <main class="result-page">
+    <h2>ผล<span>การประเมิน</span></h2>
+
+    <div class="panel" id="results"></div>
+
+    <div class="actions">
+      <button class="outline" onclick="location.href='index.html'">
+        กลับหน้าหลัก
+      </button>
+
+      <button onclick="location.href='select.html'">
+        วิเคราะห์เมนูถัดไป
+      </button>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

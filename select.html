@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>เลือกสารก่อแพ้</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg" onload="renderSelect()">
+  <header class="navbar">
+    <div class="logo">GINDAIMAI</div>
+    <div class="nav-link-group">
+      <div class="nav-link" onclick="location.href='index.html'">หน้าหลัก</div>
+    </div>
+    <!--
+    <div class="profile">
+      <img src="assets/proflie.png" alt="profile">
+    </div> 
+    -->
+  </header>
+
+  <main class="split">
+    <section class="left">
+  <h2>ติ๊กรายการ <br> <span>อาหารที่แพ้</span></h2>
+
+  <p class="sub-text">
+    เลือกอาหารที่คุณแพ้พร้อมระบุระดับ
+      ความรุนแรงของอาการ 
+  </p>
+
+  <div id="allergens" class="allergen-grid"></div>
+
+  <div id="customWrap"></div>
+
+  <p class="note-text">*เลือกได้มากกว่า 1 รายการ*</p>
+
+  <button onclick="location.href='upload.html'">
+    เริ่มวิเคราะห์
+  </button>
+</section>
+
+    <section class="panel">
+      <h3>รายการที่เลือก</h3>
+      <p class="sub-text">
+        สามารถเลือกปรับระดับความรุนแรงได้
+      </p>
+
+      <div id="selectedItems"></div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
