@@ -41,15 +41,15 @@
   "green_curry_seafood_combo": ["shellfish", "fish", "wheat"],
   "green_curry_tofu_mushroom": ["soy", "shellfish"],
 
-  "beef_basil": ["soy", "wheat"],
-  "pork_basil_traditional": ["fish", "shellfish"],
-  "seafood_basil": ["shellfish", "soy", "wheat"],
-  "braised_chicken_basil": ["soy", "wheat"],
-  "shrimp_basil": ["shellfish", "soy", "wheat", "fish"],
-  "crispy_pork_basil": ["soy", "wheat"],
-  "chicken_basil_egg": ["egg", "soy", "wheat"],
-  "mixed_seafood_basil": ["shellfish", "soy", "wheat"],
-  "spicy_beef_basil": ["shellfish", "soy", "wheat"],
+  "pad_krapao_beef": ["soy", "wheat"],
+  "pad_krapao_pork": ["fish", "shellfish"],
+  "pad_krapao_seafood": ["shellfish", "soy", "wheat"],
+  "pad_krapao_braised_chicken": ["soy", "wheat"],
+  "pad_krapao_shrimp": ["shellfish", "soy", "wheat", "fish"],
+  "pad_krapao_crispy_pork": ["soy", "wheat"],
+  "pad_krapao_chicken_egg": ["egg", "soy", "wheat"],
+  "pad_krapao_mixed_seafood": ["shellfish", "soy", "wheat"],
+  "pad_krapao_spicy_beef": ["shellfish", "soy", "wheat"],
 
   "tom_kha_gai_classic": ["fish", "shellfish"],
   "tom_kha_gai_chicken_blood": [],
@@ -78,7 +78,6 @@
   "sukiyaki_seafood_combo": ["shellfish", "egg", "soy", "wheat", "sesame"],
   "sukiyaki_crispy_pork": ["egg", "soy", "wheat", "sesame"],
   
-
   "sour_curry_mixed_vegetable_shrimp": ["shellfish"],
   "sour_curry_southern_fish": ["fish", "shellfish"],
   "sour_curry_papaya_shrimp": ["shellfish", "fish"],
@@ -88,12 +87,12 @@
   "sour_curry_fish_cabbage": ["fish", "shellfish"],
   "sour_curry_mixed_seafood": ["shellfish"],
 
-  "massaman_beef_shank": ["shellfish", "peanut", "fish"],
-  "massaman_chicken_classic": ["peanut", "shellfish", "fish"],
-  "massaman_premium_chicken": ["shellfish", "peanut", "fish"],
-  "massaman_pork_belly": ["shellfish", "peanut", "fish"],
-  "massaman_quick_chicken": ["shellfish", "peanut", "fish"],
-  "massaman_beef_potato": ["shellfish", "peanut", "fish"],
-  "massaman_chicken_peanut": ["shellfish", "peanut", "fish"],
-  "massaman_vegetarian": ["soy"]
+  "massaman_curry_beef_shank": ["shellfish", "peanut", "fish"],
+  "massaman_curry_chicken_classic": ["peanut", "shellfish", "fish"],
+  "massaman_curry_premium_chicken": ["shellfish", "peanut", "fish", "tree_nut"],
+  "massaman_curry_pork_belly": ["shellfish", "peanut", "fish", "tree_nut"],
+  "massaman_curry_quick_chicken": ["shellfish", "peanut", "fish"],
+  "massaman_curry_beef_potato": ["shellfish", "peanut", "fish"],
+  "massaman_curry_chicken_peanut": ["shellfish", "peanut", "fish"],
+  "massaman_curry_vegetarian": ["soy"]
 }

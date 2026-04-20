@@ -32,6 +32,14 @@
 
     "peanut":         ["peanut"],
     "roasted_peanut": ["peanut"],
+    "tree_nut":       ["tree_nut"],
+    "sesame":         ["sesame"],
+    "wheat":          ["wheat"],
+    "sesame_oil":     ["sesame"],
+    "sesame_seeds":   ["sesame"],
+    "white_sesame":   ["sesame"],
+    "black_sesame":   ["sesame"],
+    "sesame_paste":   ["sesame"],
 
     "tofu":                       ["soy"],
     "firm_tofu":                  ["soy"],
@@ -119,6 +127,8 @@
     "cardamom":                    [],
     "spice_mix":                   [],
     "apple":                       [],
-    "green_mango":                 []
+    "green_mango":                 [],
+    "pineapple":                   [],
+    "vegetarian_massaman_paste":   []
   }
 }

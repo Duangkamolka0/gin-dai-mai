@@ -8,4 +8,4 @@
   "wheat":     { "severity": "medium", "score": 2 },
   "soy":       { "severity": "low",    "score": 1 },
   "sesame":    { "severity": "medium", "score": 2 }
-}
+} 
