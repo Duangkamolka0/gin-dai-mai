@@ -76,15 +76,13 @@
     {"ingredients": ["oyster_mushroom", "roasted_rice_powder", "chili_flakes", "lime_juice", "soy_sauce", "shallot", "mint"], "prob": 0.1},
     {"ingredients": ["crispy_pork", "roasted_rice_powder", "chili_flakes", "lime_juice", "fish_sauce", "shallot", "mint"], "prob": 0.1}
   ],
-  "sukiyaki": [
-    {"ingredients": ["shrimp", "squid", "glass_noodle", "egg", "napa_cabbage", "morning_glory", "sukiyaki_sauce", "sesame_oil"], "prob": 0.12},
-    {"ingredients": ["pork", "egg", "morning_glory", "celery", "chicken_broth", "sukiyaki_sauce", "white_sesame"], "prob": 0.12},
-    {"ingredients": ["pork", "shrimp", "fish_ball", "glass_noodle", "mixed_vegetable", "broth", "sukiyaki_sauce"], "prob": 0.12},
-    {"ingredients": ["chicken", "glass_noodle", "cabbage", "egg", "sukiyaki_sauce", "sesame_oil"], "prob": 0.12},
-    {"ingredients": ["beef", "glass_noodle", "napa_cabbage", "egg", "sukiyaki_sauce", "white_sesame"], "prob": 0.13},
-    {"ingredients": ["firm_tofu", "glass_noodle", "napa_cabbage", "morning_glory", "soy_sauce", "sesame_oil"], "prob": 0.13},
-    {"ingredients": ["shrimp", "squid", "mussel", "glass_noodle", "napa_cabbage", "egg", "sukiyaki_sauce", "sesame_oil"], "prob": 0.13},
-    {"ingredients": ["crispy_pork", "glass_noodle", "cabbage", "egg", "sukiyaki_sauce"], "prob": 0.13}
+  "panangchickencurry": [
+    {"ingredients": ["chicken", "panang_curry_paste", "coconut_milk", "kaffir_lime_leaf", "fish_sauce", "palm_sugar"], "prob": 0.17},
+    {"ingredients": ["chicken", "panang_curry_paste", "coconut_milk", "red_chili", "fish_sauce", "palm_sugar"], "prob": 0.17},
+    {"ingredients": ["chicken", "panang_curry_paste", "coconut_milk", "peanut", "kaffir_lime_leaf", "fish_sauce"], "prob": 0.16},
+    {"ingredients": ["chicken", "panang_curry_paste", "coconut_milk", "evaporated_milk", "fish_sauce"], "prob": 0.16},
+    {"ingredients": ["pork", "panang_curry_paste", "coconut_milk", "kaffir_lime_leaf", "fish_sauce"], "prob": 0.17},
+    {"ingredients": ["beef", "panang_curry_paste", "coconut_milk", "kaffir_lime_leaf", "fish_sauce"], "prob": 0.17}
   ],
   "sour_curry": [
     {"ingredients": ["napa_cabbage", "long_bean", "carrot", "shrimp", "sour_curry_paste", "tamarind_paste"], "prob": 0.12},
