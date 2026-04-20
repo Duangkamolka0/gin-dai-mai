@@ -1,0 +1,8 @@
+.DS_Store
+venv/
+venv_tf/
+venv_tf311/
+output/
+__pycache__/
+*.pyc
+*.zip
