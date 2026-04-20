@@ -6,7 +6,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.applications.densenet import preprocess_input
 from keras.models import load_model
 
 model = tf.keras.models.load_model('output/food_classifier.keras')

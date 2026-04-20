@@ -4,7 +4,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from tensorflow.keras.preprocessing import image
-from tensorflow.keras.applications.efficientnet import preprocess_input
+from tensorflow.keras.applications.densenet import preprocess_input
 
 BASE_DIR = os.path.dirname(__file__)
 model = tf.keras.models.load_model(os.path.join(BASE_DIR, '..', 'output', 'food_classifier.keras'))
@@ -37,7 +37,7 @@ def predict_food(img_path):
     
 # TEST
 if __name__ == '__main__':
-    img_path = 'dataset/thai-food-dataset/somtam/Somtam (100).jpg'  
+    img_path = 'dataset/thai-food-dataset/padthai/padthai (9).jpg'  
     class_name, confidence = predict_food(img_path)
     print(f'Detected: {class_name} ({confidence*100:.1f}%)')
 
