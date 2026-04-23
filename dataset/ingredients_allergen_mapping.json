@@ -19,7 +19,7 @@
     "fish_ball":                 ["fish", "wheat"],
     "fish_sauce":                ["fish", "shellfish"],
     "fermented_fish_sauce":      ["fish"],
-    "sour_curry_paste":          ["shellfish"],
+    "sour_curry_paste":          ["shellfish", "fish"],
     "southern_sour_curry_paste": ["shellfish"],
     "green_curry_paste":         ["shellfish"],
     "massaman_curry_paste":      ["shellfish", "peanut", "fish"],
@@ -46,9 +46,11 @@
     "textured_vegetable_protein": ["soy"],
     "soy_sauce":                  ["soy", "wheat"],
     "seasoning_sauce":            ["soy", "wheat"],
-    "sukiyaki_sauce":             ["soy", "wheat", "sesame"],
-    "northern_larb_spice":         ["sesame"],
-    "broth":                       ["soy", "wheat", "fish", "shellfish"],
+    "panang_curry_paste":         ["shellfish", "fish", "peanut"],
+    "northern_larb_spice":        ["sesame"],
+    "broth":                      ["soy", "wheat", "fish", "shellfish"],
+    "vegetarian_massaman_paste":  ["soy"],
+    "vegetarian_sour_curry_paste": ["soy"],
 
     "papaya":                      [],
     "green_papaya":                [],
@@ -116,7 +118,6 @@
     "celery":                      [],
     "mixed_vegetable":             [],
     "chicken_broth":               [],
-    "vegetarian_sour_curry_paste": [],
     "vegan_green_curry_paste":     [],
     "drumstick_pod":               [],
     "long_bean":                   [],
@@ -128,7 +129,6 @@
     "spice_mix":                   [],
     "apple":                       [],
     "green_mango":                 [],
-    "pineapple":                   [],
-    "vegetarian_massaman_paste":   []
+    "pineapple":                   []
   }
 }
