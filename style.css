@@ -57,7 +57,7 @@ select,
 }
 
 .nav-link {
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
 }
 
@@ -78,8 +78,7 @@ select,
 }
 
 .right-steps,
-.panel,
-.upload-box {
+.panel {
   flex: 1;
 }
 
@@ -115,13 +114,13 @@ select,
 h1 {
   font-size: 110px;
   font-style: italic;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 20px;
 }
 
 h2 {
   font-size: 72px;
-  font-weight: 600;
+  font-weight: 400;
   margin-bottom: 10px;
 }
 
@@ -154,8 +153,34 @@ button {
   padding: 16px 42px;
   font-size: 22px;
   color: #173028;
-  font-weight: bold;
+  font-weight: 500;
   cursor: pointer;
+}
+
+.custom-input {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 28px;
+}
+
+.add-btn {
+  padding: 8px 18px;
+  font-size: 16px;
+  border-radius: 16px;
+  height: 42px;
+  min-width: 78px;
+  margin-top: 20px;
+  margin-left: 12px;
+}
+
+.analyze-btn {
+  padding: 12px 26px;
+  font-size: 18px;
+  border-radius: 22px;
+  min-width: 150px;
+  height: 52px;
+  margin-top: 30px;
 }
 
 .outline {
@@ -172,7 +197,7 @@ button {
 }
 
 .tag {
-  background: #1B2B23 ;
+  background: #1B2B23;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -183,6 +208,7 @@ button {
   border-radius: 16px;
   cursor: pointer;
   font-size: 18px;
+  font-weight: 400;
 }
 
 .active {
@@ -248,8 +274,8 @@ select option {
 
 .upload-box {
   width: 100%;
-  max-width: 560px;
-  height: 340px;
+  max-width: 700px;
+  height: 500px;
   background: #1B2B23;
   border: 1px solid #29443B;
   border-radius: 32px;
@@ -267,12 +293,13 @@ select option {
   margin-bottom: 22px;
 }
 
-.upload-box p {
-  color: #68A590;
-  font-size: 22px;
-  line-height: 1.5;
-  max-width: 280px;
-  margin: 0;
+.upload-box {
+  background-repeat: no-repeat;
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .next-btn {
@@ -334,4 +361,135 @@ select option {
 
 #results::-webkit-scrollbar-track {
   background: transparent;
+}
+
+@media (max-width: 768px) {
+  .navbar {
+    padding: 16px 20px;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .logo {
+    width: auto;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .nav-link-group {
+    justify-content: flex-end;
+  }
+
+  .nav-link {
+    font-size: 15px;
+    white-space: nowrap;
+  }
+
+  .hero,
+  .split,
+  .result-page {
+    flex-direction: column;
+    padding: 30px 24px;
+    gap: 20px;
+  }
+
+  .left,
+  .right-steps,
+  .panel,
+  .upload-section {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 8px;
+  }
+
+  h1 {
+    font-size: 48px;
+  }
+
+  h2 {
+    font-size: 32px;
+    margin-bottom: 8px;
+  }
+
+  p {
+    font-size: 17px;
+  }
+
+  .sub-text {
+    font-size: 15px;
+    margin-bottom: 16px;
+  }
+
+  .allergen-grid {
+    max-width: 100%;
+    gap: 10px;
+  }
+
+  .tag {
+    min-width: calc(50% - 10px);
+    font-size: 15px;
+    height: 42px;
+  }
+
+  .custom-input {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
+  .add-btn,
+  .analyze-btn,
+  .next-btn {
+    width: 100%;
+    min-width: unset;
+    margin-left: 0;
+    font-size: 18px;
+  }
+
+  .upload-box {
+    max-width: 100%;
+    min-height: 220px;
+    height: 220px;
+    padding: 20px;
+    margin-bottom: 10px;
+  }
+
+  .camera-img {
+    width: 44px;
+    margin-bottom: 10px;
+  }
+
+  .upload-box p {
+    font-size: 14px;
+  }
+
+  .next-btn {
+    margin-top: 15px;
+  }
+
+  .panel {
+    padding: 15px;
+  }
+
+  .selected-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .item-left {
+    width: 100%;
+  }
+
+  select {
+    width: 100%;
+    font-size: 14px;
+  }
+}
+
+#customWrap {
+  margin-top: 20px;
 }

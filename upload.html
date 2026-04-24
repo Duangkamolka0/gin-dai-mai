@@ -1,3 +1,4 @@
+</html>
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -8,18 +9,18 @@
 </head>
 <body class="bg">
   <header class="navbar">
-  <div class="logo">GINDAIMAI</div>
-  <div class="nav-link-group">
-    <div class="nav-link" onclick="location.href='index.html'">
-      หน้าหลัก
+    <div class="logo">GINDAIMAI</div>
+    <div class="nav-link-group">
+      <div class="nav-link" onclick="location.href='index.html'">
+        หน้าหลัก
+      </div>
     </div>
-  </div>
-  <!--
+    <!--
   <div class="profile">
     <img src="assets/profile.png" alt="profile">
   </div>
     -->
-</header>
+  </header>
 
   <main class="split">
     <section class="left">
@@ -28,24 +29,26 @@
     </section>
 
     <section class="upload-section">
-      <label class="upload-box">
-        <input 
+      <label class="upload-box" id="uploadBox">
+        <input
+          id="imageInput"
           type="file"
           accept="image/*"
           capture="environment"
           hidden
           onchange="previewImage(event)"
         >
-
-        <img src="assets/camera.png" alt="camera" class="camera-img">
-
-        <p>ถ่ายรูปหรืออัปโหลดรูปภาพอาหารที่ต้องการ</p>
+        <img src="assets/camera.png" alt="camera" class="camera-img" id="cameraIcon">
+        <p id="uploadText">ถ่ายรูปหรืออัปโหลดรูปภาพอาหารที่ต้องการ</p>
       </label>
 
-      <button class="next-btn" onclick="location.href='result.html'">
-        ถัดไป
+      <button id="nextBtn" class="next-btn" disabled onclick="handleAnalyze()">
+        เริ่มวิเคราะห์
       </button>
     </section>
   </main>
+
+  <script src="api.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
