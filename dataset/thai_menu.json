@@ -1,14 +1,14 @@
 {
   "menu_thai_labels": {
     "padthai":              "ผัดไทย",
-    "somtam":               "ส้มตำ",
+    "Somtam":               "ส้มตำ",
     "tomyum":               "ต้มยำ",
-    "green_curry":          "แกงเขียวหวาน",
-    "pad_krapao":           "ผัดกะเพรา",
-    "tom_kha_gai":          "ต้มข่าไ",
+    "greencurry":          "แกงเขียวหวาน",
+    "padkrapao":           "ผัดกะเพรา",
+    "tomkhagai":            "ต้มข่า",
     "larb":                 "ลาบ",
     "panangchickencurry":   "แกงพะแนง",
-    "sour_curry":           "แกงส้ม",
-    "massaman_curry":       "แกงมัสมั่น"
+    "thaisourcurry":           "แกงส้ม",
+    "massamancurry":       "แกงมัสมั่น"
   }
 }

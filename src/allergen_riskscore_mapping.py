@@ -182,7 +182,7 @@ if __name__ == "__main__":
         "tofu": "high",
         "coconut_milk": "low"
     }
-    menus = ["padthai", "somtam", "massaman_curry"]
+    menus = ["padkrapao"]
 
     for menu in menus:
         items = get_allergen(menu, allergen_level, custom_ingredients)
