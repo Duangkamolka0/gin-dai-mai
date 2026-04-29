@@ -14,7 +14,7 @@ function toggleItem(name) {
   if (store[name]) {
     delete store[name];
   } else {
-    store[name] = 'เสี่ยงปานกลาง';
+    store[name] = 'อาการรุนแรง';
   }
   saveData();
   renderSelect();
@@ -23,15 +23,7 @@ function toggleItem(name) {
 function setLevel(name, value) {
   store[name] = value;
   saveData();
-}
-
-function addCustom() {
-  const value = document.getElementById('customInput').value.trim();
-  if (value) {
-    store[value] = 'เสี่ยงน้อย';
-    saveData();
-    renderSelect();
-  }
+  renderSelect();
 }
 
 function renderSelect() {
@@ -44,98 +36,93 @@ function renderSelect() {
     `).join('');
   }
 
+  const selectedItemsEl = document.getElementById('selectedItems');
+  if (selectedItemsEl) {
+    const selectedKeys = Object.keys(store).filter(item => item !== 'อื่นๆ');
+    selectedItemsEl.innerHTML = selectedKeys.map(item => {
+      let level = store[item];
+      let color = '#1BCF93';
+      let width = '30%';
+      if (level === 'อาการปานกลาง') { color = '#E6DF7C'; width = '60%'; }
+      if (level === 'อาการรุนแรง') { color = '#FF5B5B'; width = '100%'; }
+
+      return `
+        <div class="selected-row" style="margin-bottom: 20px; border-bottom: 1px solid #29443B; padding-bottom: 10px;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 18px; font-weight: bold;">${item}</span>
+            <select onchange="setLevel('${item}', this.value)" style="background: transparent; color: #68A590; border: 1px solid #29443B; border-radius: 5px; font-size: 12px;">
+              <option value="อาการรุนแรง" ${level === 'อาการรุนแรง' ? 'selected' : ''}>อาการรุนแรง</option>
+              <option value="อาการปานกลาง" ${level === 'อาการปานกลาง' ? 'selected' : ''}>อาการปานกลาง</option>
+              <option value="อาการเล็กน้อย" ${level === 'อาการเล็กน้อย' ? 'selected' : ''}>อาการเล็กน้อย</option>
+            </select>
+          </div>
+          <div style="width: 100%; height: 6px; background: #1B2B23; border-radius: 10px; margin-top: 10px;">
+            <div style="width: ${width}; height: 100%; background: ${color}; border-radius: 10px; transition: 0.3s;"></div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+}
+
+function renderSelect() {
+  const allergensEl = document.getElementById('allergens');
+  if (allergensEl) {
+    allergensEl.innerHTML = presets.map(item => `
+      <span class="tag ${store[item] ? 'active' : ''}" 
+            onclick="toggleItem('${item}')"
+            style="display: inline-block; padding: 10px 20px; margin: 5px; border-radius: 15px; cursor: pointer; border: 1px solid ${store[item] ? '#1BCF93' : '#29443B'}; color: ${store[item] ? '#1BCF93' : 'white'}; background: #1B2B23;">
+        ${item}
+      </span>
+    `).join('');
+  }
+
   const customWrapEl = document.getElementById('customWrap');
   if (customWrapEl) {
     customWrapEl.innerHTML = store['อื่นๆ'] ? `
-      <input id="customInput" placeholder="กรอกสารเพิ่มเติม">
-      <button class="add-btn" onclick="addCustom()">เพิ่ม</button>
+      <div class="custom-input" style="margin-top: 15px;">
+        <input id="customInput" placeholder="กรอกสารเพิ่มเติม" style="background: #1B2B23; border: 1px solid #29443B; color: white; padding: 10px; border-radius: 10px;">
+        <button class="add-btn" onclick="addCustom()" style="background: #1BCF93; color: #111715; border: none; padding: 10px 20px; border-radius: 10px; margin-left: 5px; cursor: pointer;">เพิ่ม</button>
+      </div>
     ` : '';
   }
 
   const selectedItemsEl = document.getElementById('selectedItems');
   if (selectedItemsEl) {
-    selectedItemsEl.innerHTML = Object.keys(store)
-      .filter(item => item !== 'อื่นๆ')
-      .map(item => {
+    const selectedKeys = Object.keys(store).filter(item => item !== 'อื่นๆ');
+    if (selectedKeys.length === 0) {
+      selectedItemsEl.innerHTML = '<p class="sub-text">ยังไม่ได้เลือกรายการ</p>';
+    } else {
+      selectedItemsEl.innerHTML = selectedKeys.map(item => {
         let level = store[item];
-        let width = '30%';
         let color = '#1BCF93';
-        if (level === 'เสี่ยงปานกลาง') { width = '60%'; color = '#E6DF7C'; }
-        if (level === 'เสี่ยงมาก') { width = '100%'; color = '#FF5B5B'; }
+        let width = '30%';
+
+        if (level === 'เสี่ยงปานกลาง') { 
+          color = '#E6DF7C'; 
+          width = '60%'; 
+        } else if (level === 'เสี่ยงมาก') { 
+          color = '#FF5B5B'; 
+          width = '100%'; 
+        }
 
         return `
-          <div class="selected-row">
-            <div class="item-left">
-              <span class="item-name">${item}</span>
-              <div class="risk-bar">
-                <div class="risk-fill" style="width:${width}; background:${color};"></div>
-              </div>
+          <div class="selected-row" style="margin-bottom: 20px; border-bottom: 1px solid #29443B; padding-bottom: 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+              <span class="item-name" style="font-size: 18px; color: white;">${item}</span>
+              <select onchange="setLevel('${item}', this.value); renderSelect();" 
+                      style="background: transparent; color: #68A590; border: 1px solid #29443B; border-radius: 5px; font-size: 14px; cursor: pointer;">
+                <option value="เสี่ยงมาก" ${level === 'เสี่ยงมาก' ? 'selected' : ''}>เสี่ยงมาก</option>
+                <option value="เสี่ยงปานกลาง" ${level === 'เสี่ยงปานกลาง' ? 'selected' : ''}>เสี่ยงปานกลาง</option>
+                <option value="เสี่ยงน้อย" ${level === 'เสี่ยงน้อย' ? 'selected' : ''}>เสี่ยงน้อย</option>
+              </select>
             </div>
-            <select onchange="setLevel('${item}', this.value); renderSelect();">
-              <option ${level === 'เสี่ยงมาก' ? 'selected' : ''}>เสี่ยงมาก</option>
-              <option ${level === 'เสี่ยงปานกลาง' ? 'selected' : ''}>เสี่ยงปานกลาง</option>
-              <option ${level === 'เสี่ยงน้อย' ? 'selected' : ''}>เสี่ยงน้อย</option>
-            </select>
+            <div style="width: 100%; height: 6px; background: #1B2B23; border-radius: 10px;">
+              <div style="width: ${width}; height: 100%; background: ${color}; border-radius: 10px; transition: 0.3s;"></div>
+            </div>
           </div>
         `;
       }).join('');
+    }
   }
-}
-
-function previewImage(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  selectedImageFile = file;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const box = document.getElementById("uploadBox");
-    box.style.backgroundImage = `url('${e.target.result}')`;
-    box.style.backgroundSize = "contain";
-    box.style.backgroundRepeat = "no-repeat";
-    box.style.backgroundPosition = "center";
-    box.style.backgroundColor = "#1B2B23";
-    document.getElementById("cameraIcon").style.display = "none";
-    document.getElementById("uploadText").style.display = "none";
-    document.getElementById("nextBtn").disabled = false;
-  };
-  reader.readAsDataURL(file);
-}
-
-async function handleAnalyze() {
-  const nextBtn = document.getElementById("nextBtn");
-  nextBtn.disabled = true;
-  nextBtn.innerText = "กำลังวิเคราะห์...";
-
-  try {
-    const result = await analyzeFood(selectedImageFile);
-    localStorage.setItem('analysisResult', JSON.stringify(result));
-    location.href = 'result.html';
-  } catch (error) {
-    nextBtn.disabled = false;
-    nextBtn.innerText = "เริ่มวิเคราะห์";
-  }
-}
-
-function renderResult() {
-  const resultData = JSON.parse(localStorage.getItem('analysisResult'));
-  const resultsContainer = document.getElementById('results');
-  if (!resultsContainer) return;
-
-  if (!resultData || !resultData.allergens) {
-    resultsContainer.innerHTML = `<p class="sub-text">ยังไม่มีผลการวิเคราะห์</p>`;
-    return;
-  }
-
-  resultsContainer.innerHTML = resultData.allergens.map(item => `
-    <div class="row">
-      <div style="display: flex; flex-direction: column;">
-        <span style="font-weight: 500;">${item.name}</span>
-        <small style="color: #68A590; font-size: 12px;">ความแม่นยำ ${(item.score)}%</small>
-      </div>
-      <span style="color: ${item.color}; font-weight: bold;">
-        ${item.level}
-      </span>
-    </div>
-  `).join('');
 }
