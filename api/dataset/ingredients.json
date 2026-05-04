@@ -37,10 +37,10 @@
   "greencurry": [
     {"ingredients": ["chicken", "green_curry_paste", "coconut_milk", "thai_eggplant", "pea_eggplant", "red_chili", "basil", "fish_sauce", "palm_sugar"], "prob": 0.11},
     {"ingredients": ["beef", "green_curry_paste", "coconut_milk", "kaffir_lime_leaf", "red_chili", "thai_eggplant", "palm_sugar", "fish_sauce"], "prob": 0.11},
-    {"ingredients": ["fish_ball", "young_coconut_shoot", "fingerroot", "green_curry_paste", "coconut_milk", "palm_sugar", "fish_sauce"], "prob": 0.11},
+    {"ingredients": ["fish_ball", "thai_eggplant", "fingerroot", "green_curry_paste", "coconut_milk", "palm_sugar", "fish_sauce"], "prob": 0.11},
     {"ingredients": ["shrimp", "squid", "coconut_milk", "green_curry_paste", "basil", "red_chili"], "prob": 0.11},
     {"ingredients": ["tofu", "textured_vegetable_protein", "thai_eggplant", "pea_eggplant", "mushroom", "coconut_milk", "vegan_green_curry_paste", "soy_sauce", "coconut_sugar", "basil", "red_chili", "kaffir_lime_leaf"], "prob": 0.11},
-    {"ingredients": ["pork", "green_curry_paste", "coconut_milk", "thai_eggplant", "pea_eggplant", "red_chili", "basil", "fish_sauce", "palm_sugar"], "prob": 0.11},
+    {"ingredients": ["pork", "green_curry_paste", "coconut_milk", "oyster_sauce", "thai_eggplant", "pea_eggplant", "red_chili", "basil", "fish_sauce", "palm_sugar"], "prob": 0.11},
     {"ingredients": ["chicken", "green_curry_paste", "coconut_milk", "bamboo_shoot", "basil", "red_chili", "fish_sauce"], "prob": 0.11},
     {"ingredients": ["shrimp", "squid", "fish_ball", "green_curry_paste", "coconut_milk", "basil", "fish_sauce"], "prob": 0.11},
     {"ingredients": ["tofu", "mushroom", "green_curry_paste", "coconut_milk", "thai_eggplant", "basil", "soy_sauce"], "prob": 0.12}

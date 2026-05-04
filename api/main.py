@@ -17,9 +17,9 @@ app.add_middleware(
     
 )
 
-api.include_router(router)
+app.include_router(router)
 
-app.get("/")
+@app.get("/")
 def root():
     return {"status": 200, "message": "GIN DAI MAI Thai food allergen api is running..."}
 
