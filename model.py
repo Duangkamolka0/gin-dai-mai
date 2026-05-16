@@ -17,11 +17,11 @@ def load_model_and_label():
     global class_map_index_to_class
     
     if model_food is  None:
-        model_path = BASE_DIR / "weight"/ "food_classifier.keras"
+        model_path = BASE_DIR / "api" / "weight" / "food_classifier.keras"
         model_food = tf.keras.models.load_model(str(model_path))
         
     if class_map_index_to_class is None:
-        class_map_path = BASE_DIR / "weight" / "class_map.json"
+        class_map_path = BASE_DIR / "api" / "weight" / "class_map.json"
         with open(class_map_path, "r") as f:
             raw = json.load(f)    
             class_map_index_to_class = {str(v): k for k, v in raw.items()}

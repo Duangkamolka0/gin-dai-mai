@@ -1,4 +1,7 @@
 import json
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent
 
 
 def get_level_color(score, prob):
@@ -13,7 +16,10 @@ def get_level_color(score, prob):
 
 
 def analyze_allergens(food_name):
-    with open("ingredients_allergen_mapping.json", "r", encoding="utf-8") as file:
+
+    json_path = BASE_DIR / "api" / "data" / "ingredients_allergen_mapping.json"
+
+    with open(json_path, "r", encoding="utf-8") as file:
         data = json.load(file)
 
     food = data.get(food_name.lower())
