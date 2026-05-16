@@ -1,0 +1,49 @@
+</html>
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>อัปโหลดรูป</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg">
+  <header class="navbar">
+    <div class="logo">GINDAIMAI</div>
+    <div class="nav-link-group">
+      <div class="nav-link" onclick="location.href='index.html'">
+        หน้าหลัก
+      </div>
+    </div>
+  </header>
+
+  <main class="split">
+    <section class="left">
+      <h2>ถ่ายรูป <span>อาหาร</span></h2>
+      <p>ถ่ายรูปหรืออัปโหลดภาพอาหารที่ต้องการนำมาวิเคราะห์</p>
+    </section>
+
+    <section class="upload-section">
+      <label class="upload-box" id="uploadBox">
+        <input
+          id="imageInput"
+          type="file"
+          accept="image/*"
+          capture="environment"
+          hidden
+          onchange="previewImage(event)"
+        >
+        <img src="assets/camera.png" alt="camera" class="camera-img" id="cameraIcon">
+        <p id="uploadText">ถ่ายรูปหรืออัปโหลดรูปภาพอาหารที่ต้องการ</p>
+      </label>
+
+      <button id="nextBtn" class="next-btn" disabled onclick="handleAnalyze()">
+        เริ่มวิเคราะห์
+      </button>
+    </section>
+  </main>
+
+  <script src="api.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
