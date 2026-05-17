@@ -3,6 +3,25 @@ const presets = [
   'ถั่วเหลือง', 'ถั่วเปลือกแข็ง', 'อาหารทะเลเปลือกแข็ง', 'งา', 'อื่นๆ'
 ];
 
+const navigationEntries = window.performance.getEntriesByType("navigation");
+const isAbsoluteReload = navigationEntries.length > 0 && navigationEntries[0].type === "reload";
+
+if (isAbsoluteReload) {
+  let rawStore = JSON.parse(localStorage.getItem('gindaimaiData')) || {};
+  let cleanedStore = {};
+  
+  presets.forEach(item => {
+    if (rawStore[item]) {
+      cleanedStore[item] = rawStore[item];
+    }
+  });
+  if (rawStore['อื่นๆ']) {
+    cleanedStore['อื่นๆ'] = rawStore['อื่นๆ'];
+  }
+  
+  localStorage.setItem('gindaimaiData', JSON.stringify(cleanedStore));
+}
+
 let store = JSON.parse(localStorage.getItem('gindaimaiData')) || {};
 let selectedImageFile = null;
 
