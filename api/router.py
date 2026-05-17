@@ -1,7 +1,7 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from model import predict_food_from_bytes
-from scorer import analyze_allergens
-from schemas import AllergenResponse
+from .model import predict_food_from_bytes
+from .scorer import analyze_allergens
+from .schemas import AllergenResponse
 import json
 
 router = APIRouter(prefix="/api/v1", tags=["allergen"])

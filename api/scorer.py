@@ -1,4 +1,4 @@
-from allergen_riskscore_mapping import get_allergen, get_overall_score, THAI_MENU
+from .allergen_riskscore_mapping import get_allergen, get_overall_score, THAI_MENU
 
 def analyze_allergens(food_name: str, allergen_level: dict = {}, custom_ingredients: dict = {}) -> dict:
     
