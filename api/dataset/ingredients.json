@@ -1,5 +1,5 @@
 {
-  "Somtam": [
+  "somtam": [
     {"ingredients": ["papaya", "chili", "garlic", "lime", "fish_sauce", "palm_sugar", "dried_shrimp", "peanut", "tomato"], "prob": 0.11},
     {"ingredients": ["papaya", "chili", "garlic", "lime", "fish_sauce", "salted_crab", "tomato"], "prob": 0.11},
     {"ingredients": ["papaya", "chili", "garlic", "fermented_fish_sauce", "lime", "tomato", "yardlong_bean"], "prob": 0.11},
