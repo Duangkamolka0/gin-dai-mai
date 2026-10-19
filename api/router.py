@@ -9,7 +9,7 @@ router = APIRouter(prefix="/api/v1", tags=["allergen"])
 @router.post("/allergen", response_model=AllergenResponse)
 async def get_allergen(
     file: UploadFile = File(...),
-    user_data: str = Form("{}")  # 🟢 เพิ่มตรงนี้เพื่อดักรับก้อนข้อมูลคนแพ้ที่ api.js ส่งมา
+    user_data: str = Form("{}")  #  เพิ่มตรงนี้เพื่อดักรับก่อนข้อมูลคนแพ้ที่ api.js ส่งมา
 ):
     # ตรวจสอบประเภทไฟล์
     if not file.content_type or not file.content_type.startswith("image/"):
@@ -28,7 +28,9 @@ async def get_allergen(
         custom_ingredients = {}
 
     # 🚀 Step 1: ทำการจำแนกเมนูอาหารจากรูปภาพ (Food Recognition)
-    class_name, confidence = predict_food_from_bytes(image_bytes)
+    prediction = predict_food_from_bytes(image_bytes)
+    class_name = prediction["name"]
+    confidence = prediction["confidence"]
     
     # 🚀 Step 2: ประเมินคะแนนความเสี่ยงสารก่อภูมิแพ้ โดยส่งข้อมูลความเสี่ยงของผู้ใช้เข้าไปคำนวณจริง
     result = analyze_allergens(

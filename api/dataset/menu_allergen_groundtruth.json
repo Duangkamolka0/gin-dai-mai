@@ -1,96 +1,152 @@
 {
-  "somtam_thai": ["fish", "shellfish", "peanut"],
-  "somtam_poo": ["fish", "shellfish"],
-  "somtam_plara": ["fish", "shellfish"],
-  "somtam_thai_salted_egg": ["fish", "shellfish", "peanut", "egg"],
-  "somtam_poo_plara": ["fish", "shellfish"],
-  "somtam_corn": ["fish", "shellfish"],
-  "somtam_fruit": ["fish", "shellfish"],
-  "somtam_salmon": ["fish", "shellfish"],
-  "somtam_mango": ["fish", "shellfish"],
-
-  "padthai_shrimp": ["shellfish", "egg", "soy", "fish", "peanut"],
-  "padthai_chicken": ["egg", "soy", "fish", "shellfish"],
-  "padthai_pork": ["egg", "soy", "fish", "shellfish", "peanut"],
-  "padthai_seafood": ["shellfish", "egg", "soy", "fish"],
-  "padthai_vegetarian": ["soy", "wheat"],
-  "padthai_crispy_pork": ["egg", "soy", "wheat"],
-  "padthai_bacon": ["egg", "fish", "shellfish"],
-  "padthai_squid": ["shellfish", "egg", "soy", "fish"],
-  "padthai_double_shrimp": ["shellfish", "egg", "fish", "peanut"],
-  "padthai_mixed_meat": ["egg", "soy", "wheat"],
-  "padthai_spicy_seafood": ["shellfish", "egg", "fish"],
-
-  "tomyum_goong_creamy": ["shellfish", "milk", "fish", "soy"],
-  "tomyum_gai_clear": ["fish", "shellfish"],
-  "tomyum_seafood": ["shellfish", "fish"],
-  "tomyum_fish_clear": ["fish", "shellfish"],
-  "tomyum_goong": ["shellfish", "fish"],
-  "tomyum_salmon": ["fish", "shellfish"],
-  "tomyum_mushroom_spicy": ["fish", "shellfish"],
-  "tomyum_chicken_creamy": ["fish", "shellfish", "milk"],
-  "tomyum_seafood_extra": ["shellfish", "fish"],
-
-  "green_curry_chicken_classic": ["shellfish", "fish"],
-  "green_curry_beef_rich": ["shellfish", "fish"],
-  "green_curry_fishball": ["fish", "wheat", "shellfish"],
-  "green_curry_seafood": ["shellfish"],
-  "green_curry_vegan": ["soy", "wheat"],
-  "green_curry_pork_classic": ["shellfish", "fish"],
-  "green_curry_chicken_bamboo": ["shellfish", "fish"],
-  "green_curry_seafood_combo": ["shellfish", "fish", "wheat"],
-  "green_curry_tofu_mushroom": ["soy", "shellfish"],
-
-  "pad_krapao_beef": ["soy", "wheat"],
-  "pad_krapao_pork": ["fish", "shellfish"],
-  "pad_krapao_seafood": ["shellfish", "soy", "wheat"],
-  "pad_krapao_braised_chicken": ["soy", "wheat"],
-  "pad_krapao_shrimp": ["shellfish", "soy", "wheat", "fish"],
-  "pad_krapao_crispy_pork": ["soy", "wheat"],
-  "pad_krapao_chicken_egg": ["egg", "soy", "wheat"],
-  "pad_krapao_mixed_seafood": ["shellfish", "soy", "wheat"],
-  "pad_krapao_spicy_beef": ["shellfish", "soy", "wheat"],
-
-  "tom_kha_gai_classic": ["fish", "shellfish"],
-  "tom_kha_gai_chicken_blood": [],
-  "tom_kha_gai_chicken_mushroom": ["fish", "shellfish"],
-  "tom_kha_gai_seafood": ["shellfish", "fish"],
-  "tom_kha_gai_shrimp": ["shellfish", "fish"],
-  "tom_kha_gai_mushroom": ["soy"],
-
-  "larb_classic_pork": ["fish", "shellfish"],
-  "larb_northern_pork": ["sesame"],
-  "larb_pork_offal": [],
-  "larb_pork_seasoning_sauce": ["soy", "wheat"],
-  "larb_chicken": [],
-  "larb_spicy_beef": ["fish", "shellfish"],
-  "larb_duck": ["fish", "shellfish"],
-  "larb_tuna": ["fish", "shellfish"],
-  "larb_mushroom_vegan": ["soy"],
-  "larb_fried_pork": ["fish", "shellfish"],
-
-  "panang_curry_chicken_classic": ["shellfish", "fish"],
-  "panang_curry_chicken_chili": ["shellfish", "fish"],
-  "panang_curry_chicken_peanut": ["shellfish", "fish", "peanut"],
-  "panang_curry_chicken_milk": ["shellfish", "fish", "milk"],
-  "panang_curry_pork": ["shellfish", "fish"],
-  "panang_curry_beef": ["shellfish", "fish"],
-  
-  "sour_curry_mixed_vegetable_shrimp": ["shellfish"],
-  "sour_curry_southern_fish": ["fish", "shellfish"],
-  "sour_curry_papaya_shrimp": ["shellfish", "fish"],
-  "sour_curry_drumstick_fish": ["fish", "shellfish"],
-  "sour_curry_vegetarian": ["soy"],
-  "sour_curry_shrimp_pineapple": ["shellfish"],
-  "sour_curry_fish_cabbage": ["fish", "shellfish"],
-  "sour_curry_mixed_seafood": ["shellfish"],
-
-  "massaman_curry_beef_shank": ["shellfish", "peanut", "fish"],
-  "massaman_curry_chicken_classic": ["peanut", "shellfish", "fish"],
-  "massaman_curry_premium_chicken": ["shellfish", "peanut", "fish", "tree_nut"],
-  "massaman_curry_pork_belly": ["shellfish", "peanut", "fish", "tree_nut"],
-  "massaman_curry_quick_chicken": ["shellfish", "peanut", "fish"],
-  "massaman_curry_beef_potato": ["shellfish", "peanut", "fish"],
-  "massaman_curry_chicken_peanut": ["shellfish", "peanut", "fish"],
-  "massaman_curry_vegetarian": ["soy"]
+  "somtam_pu_pla_ra": [
+    "crustacean",
+    "fish"
+  ],
+  "somtam_thai": [
+    "crustacean",
+    "egg",
+    "fish",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "pad_thai_fresh_shrimp": [
+    "crustacean",
+    "egg",
+    "fish",
+    "peanut",
+    "sesame",
+    "soy",
+    "wheat"
+  ],
+  "pad_thai_chicken": [
+    "crustacean",
+    "egg",
+    "fish",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "pad_thai_pork": [
+    "egg",
+    "fish",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "tom_yum_kung_creamy": [
+    "crustacean",
+    "fish",
+    "milk",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "tom_yum_kung_clear": [
+    "crustacean",
+    "fish",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "tom_yum_talay": [
+    "crustacean",
+    "fish",
+    "milk",
+    "mollusc",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "tom_yum_fish": [
+    "crustacean",
+    "fish",
+    "milk",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "green_curry_chicken": [
+    "crustacean",
+    "fish",
+    "soy",
+    "wheat"
+  ],
+  "green_curry_beef": [
+    "crustacean",
+    "fish"
+  ],
+  "panang_curry": [
+    "crustacean",
+    "fish",
+    "peanut",
+    "soy",
+    "wheat"
+  ],
+  "gaeng_som_cha_om_kung": [
+    "crustacean",
+    "egg",
+    "fish",
+    "soy",
+    "wheat"
+  ],
+  "gaeng_som_kung": [
+    "crustacean",
+    "egg",
+    "fish",
+    "soy",
+    "wheat"
+  ],
+  "gaeng_som_fish": [
+    "crustacean",
+    "fish"
+  ],
+  "massaman_chicken": [
+    "crustacean",
+    "fish",
+    "peanut",
+    "tree_nut"
+  ],
+  "massaman_beef": [
+    "crustacean",
+    "fish",
+    "peanut"
+  ],
+  "pad_krapow_minced_pork": [
+    "egg",
+    "fish",
+    "mollusc",
+    "soy",
+    "wheat"
+  ],
+  "pad_krapow_crispy_pork": [
+    "fish",
+    "mollusc",
+    "soy",
+    "wheat"
+  ],
+  "pad_krapow_beef": [
+    "fish",
+    "mollusc",
+    "soy",
+    "wheat"
+  ],
+  "tom_kha_gai": [
+    "fish",
+    "soy",
+    "wheat"
+  ],
+  "larb_pork": [
+    "fish"
+  ],
+  "larb_chicken": [
+    "fish",
+    "soy",
+    "wheat"
+  ],
+  "larb_beef": [
+    "crustacean",
+    "fish"
+  ]
 }
