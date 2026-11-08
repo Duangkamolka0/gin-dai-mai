@@ -238,10 +238,10 @@ function renderResult() {
     }
   });
 
+  // เรียงตามความเสี่ยง: สูง → ปานกลาง → ต่ำ → ไม่พบ (ระดับเท่ากัน: พบในรูปก่อน แล้วคะแนนมากก่อน)
   const LEVEL_RANK = { "สูง": 0, "high": 0, "เสี่ยงมาก": 0,
                        "ปานกลาง": 1, "medium": 1, "เสี่ยงปานกลาง": 1,
                        "ต่ำ": 2, "low": 2, "เสี่ยงน้อย": 2 };
-                       
   const levelRank = item => (item.level in LEVEL_RANK ? LEVEL_RANK[item.level] : 3);
   const certaintyRank = item => (item.certainty === "confirmed" ? 0 : item.certainty === "possible" ? 1 : 2);
   combinedAllergens.sort((a, b) =>
@@ -250,6 +250,7 @@ function renderResult() {
     (b.score || 0) - (a.score || 0)
   );
 
+  // ---------- สารก่อภูมิแพ้ ----------
   let allergensHTML = "";
   if (combinedAllergens.length === 0) {
     allergensHTML = `<p style="color: #68A590; font-size: 15px; margin: 20px 0; text-align: center;">ไม่ได้เลือกสารก่อภูมิแพ้ที่ต้องการเฝ้าระวังไว้</p>`;
@@ -281,11 +282,12 @@ function renderResult() {
         levelTextColor = "#1BCF93";
       }
 
+      // ป้ายบอกที่มา: เห็นในรูป หรือ มาจากสูตรของเมนูนี้
       let certaintyBadge = "";
       if (item.certainty === "confirmed") {
-        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 15px; border-radius: 8px; background: rgba(255, 91, 91, 0.15); color: #FF5B5B; border: 1px solid rgba(255, 91, 91, 0.4);">พบในรูป</span>`;
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 91, 91, 0.15); color: #FF5B5B; border: 1px solid rgba(255, 91, 91, 0.4);">พบในรูป</span>`;
       } else if (item.certainty === "possible") {
-        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 15px; border-radius: 8px; background: rgba(230, 223, 124, 0.12); color: #E6DF7C; border: 1px solid rgba(230, 223, 124, 0.4);">อาจมีในสูตร</span>`;
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(230, 223, 124, 0.12); color: #E6DF7C; border: 1px solid rgba(230, 223, 124, 0.4);">อาจมีในสูตร</span>`;
       }
 
       return `
@@ -302,33 +304,43 @@ function renderResult() {
     }).join('');
   }
 
+  // ---------- ส่วนผสม: แยก "พบในรูป" กับ "น่าจะมี" ----------
+  const makeChip = (ing, likely) => {
+    const allergenName = INGREDIENT_TO_ALLERGEN_TH[ing.ingredient];
+    const userIsAllergic = allergenName && activeUserAllergens.includes(allergenName);
+
+    const border = userIsAllergic ? '#FF5B5B' : (likely ? '#3A5A4E' : '#29443B');
+    const nameColor = userIsAllergic ? '#FF5B5B' : (likely ? '#9FB8AD' : '#FFFFFF');
+    const borderStyle = likely ? 'dashed' : 'solid';
+    const warn = userIsAllergic ? ' ⚠' : '';
+
+    return `
+      <span title="${ing.ingredient}" style="display: inline-flex; align-items: center; padding: 6px 12px; margin: 0 6px 8px 0; border-radius: 14px; background: #1B2B23; border: 1px ${borderStyle} ${border}; font-size: 14px;">
+        <span style="color: ${nameColor};">${ing.thai}${warn}</span>
+      </span>
+    `;
+  };
+
+  const seenIngredients = detectedIngredients;
+  const likelyIngredients = [];
+  const subLabelStyle = "font-size: 13px; color: #68A590; margin: 0 0 8px 0;";
 
   let ingredientsHTML = "";
   if (detectedIngredients.length === 0) {
     ingredientsHTML = `<p style="color: #68A590; font-size: 14px; margin: 0 0 8px 0;">ไม่พบส่วนผสมที่มองเห็นได้ชัดเจน</p>`;
   } else {
-    const isAllergic = ing => {
-      const allergenName = INGREDIENT_TO_ALLERGEN_TH[ing.ingredient];
-      return allergenName && activeUserAllergens.includes(allergenName) ? 1 : 0;
-    };
-    const sortedIngredients = [...detectedIngredients].sort((a, b) =>
-      isAllergic(b) - isAllergic(a) || b.prob - a.prob
-    );
-
-    ingredientsHTML = sortedIngredients.map(ing => {
-      const allergenName = INGREDIENT_TO_ALLERGEN_TH[ing.ingredient];
-      const userIsAllergic = allergenName && activeUserAllergens.includes(allergenName);
-
-      const border = userIsAllergic ? '#FF5B5B' : '#29443B';
-      const nameColor = userIsAllergic ? '#FF5B5B' : '#FFFFFF';
-      const warn = userIsAllergic ? '' : '';
-
-      return `
-        <span title="${ing.ingredient}" style="display: inline-flex; align-items: center; padding: 6px 12px; margin: 0 6px 8px 0; border-radius: 14px; background: #1B2B23; border: 1px solid ${border}; font-size: 14px;">
-          <span style="color: ${nameColor};">${ing.thai}${warn}</span>
-        </span>
+    if (seenIngredients.length > 0) {
+      ingredientsHTML += `
+        <p style="${subLabelStyle}">พบในรูป</p>
+        <div style="margin-bottom: 10px;">${seenIngredients.map(ing => makeChip(ing, false)).join('')}</div>
       `;
-    }).join('');
+    }
+    if (likelyIngredients.length > 0) {
+      ingredientsHTML += `
+        <p style="${subLabelStyle}">น่าจะมี <span style="font-size: 12px; color: #4F7566;">(มองเห็นไม่ชัด แต่เมนูนี้มักใส่)</span></p>
+        <div>${likelyIngredients.map(ing => makeChip(ing, true)).join('')}</div>
+      `;
+    }
   }
 
   const sectionTitleStyle = "font-size: 14px; color: #68A590; font-weight: 400; border-bottom: 1px solid #29443B; padding-bottom: 8px; margin-top: 0; margin-bottom: 16px; letter-spacing: 0.5px; text-align: left;";
@@ -345,7 +357,7 @@ function renderResult() {
         <span style="font-size: 16px; font-weight: 500; color: ${statusColor}">ประเมินภาพรวม: ${overallRisk.level}</span>
       </div>
 
-      <h4 style="${sectionTitleStyle}">ส่วนผสมที่ตรวจพบในรูป:</h4>
+      <h4 style="${sectionTitleStyle}">ส่วนผสมในอาหาร:</h4>
       <div style="width: 100%; text-align: left; margin-bottom: 20px;">
         ${ingredientsHTML}
       </div>

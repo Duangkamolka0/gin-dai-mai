@@ -1,6 +1,6 @@
 {
   "backbone": "efficientnetb0",
-  "img_size": 224,
+  "img_size": 320,
   "batch_size": 32,
   "epochs_head": 10,
   "epochs_finetune": 40,

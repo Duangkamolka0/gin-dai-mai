@@ -87,7 +87,7 @@ CLASS_NAMES = [
     for name, index in sorted(class_map.items(), key=lambda item: item[1])
 ]
 
-ingredient_model = IngredientPredictor(INGREDIENT_DIR, dish_aliases=DISH_ALIASES)
+ingredient_model = IngredientPredictor(INGREDIENT_DIR)
 
 
 # ---------- โมเดลเมนู ----------

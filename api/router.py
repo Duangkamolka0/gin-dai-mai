@@ -33,7 +33,7 @@ async def get_allergen(
     confidence = prediction["confidence"]
 
     # Step 2: ทายส่วนผสมจากรูป รวมกับสูตรเฉลี่ยของเมนูหลักที่ทายได้ (Ingredient Prediction)
-    ingredients = predict_ingredients_from_bytes(image_bytes, dish=prediction["family"])
+    ingredients = predict_ingredients_from_bytes(image_bytes, dish=prediction["name"])
 
     # Step 3: ประเมินคะแนนความเสี่ยง (ส่วนผสมที่เห็นในรูป = พบแน่นอน, จากสูตรเมนู = อาจมี)
     result = analyze_allergens(
