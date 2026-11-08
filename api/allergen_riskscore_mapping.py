@@ -14,7 +14,7 @@ with open(os.path.join(BASE_DIR, "dataset/allergen_labels.json"), "r", encoding=
     ALLERGEN_LABEL = json.load(f)
     
 with open(os.path.join(BASE_DIR, "dataset/thai_ingredients_label.json"), "r", encoding="utf-8") as f:
-    THAI_LABELS = json.load(f)["ingredient_thai_label"]
+    THAI_LABELS = json.load(f)["thai_ingredients_label"]
     
 with open(os.path.join(BASE_DIR, "dataset/thai_menu.json"), "r", encoding="utf-8") as f:
     THAI_MENU = json.load(f)["menu_thai_labels"]
@@ -40,6 +40,9 @@ LEVEL_SCORE = {
 
 def get_thai(name):
     return THAI_LABELS.get(name, THAI_ALLERGEN.get(name, name))
+
+def get_allergen_thai(name):
+    return THAI_ALLERGEN.get(name, get_thai(name))
 
 MENU_MAPPING = {
     "som tum": {"family": "somtam", "variants": None, "thai_key": "somtam"},
@@ -91,15 +94,31 @@ MENU_MAPPING = {
     "massamancurrychicken": {"family": "massaman_curry", "variants": ["massaman_chicken"], "thai_key": "massaman_chicken"},
 }
 
+# ชื่อจากโมเดลเมนูแบบ 10 คลาส (class_map.json) → ชื่อเมนูหลักใน MENU_MAPPING
+MODEL10_TO_MENU = {
+    "padthai": "pad thai",
+    "greencurry": "green curry",
+    "padkrapao": "pad kra pao",
+    "tomyum": "tom yum",
+    "somtam": "som tum",
+    "massamancurry": "massaman",
+    "panangchickencurry": "panang",
+    "thaisourcurry": "gaeng som",
+    "tomkhagai": "tomkhagai",
+    "larb": "larb",
+}
+
 USE_INGREDIENT_FREQUENCY = True
  
 def get_menu_thai(menu_name):
+    menu_name = MODEL10_TO_MENU.get(menu_name, menu_name)
     info = MENU_MAPPING.get(menu_name)
     key = info["thai_key"] if info else menu_name
     return THAI_MENU.get(key, menu_name)
  
  
 def get_ingredients(menu_name):
+    menu_name = MODEL10_TO_MENU.get(menu_name, menu_name)
     info = MENU_MAPPING.get(menu_name)
  
     if info is not None:
@@ -137,6 +156,26 @@ def get_ingredients(menu_name):
  
     return result
  
+def combine_ingredients(ingredients, detected):
+    """รวมส่วนผสมจากสูตรเมนู (อาจมี) กับส่วนผสมที่โมเดลเห็นในรูป (พบแน่นอน)
+    คืน {ingredient: {"prob": ..., "seen": True ถ้าเห็นในรูป}}"""
+    combined = {}
+    for item in ingredients:
+        combined[item["ingredient"]] = {"prob": item["prob"], "seen": False}
+
+    for item in detected or []:
+        ing = item["ingredient"]
+        prob = float(item["prob"])
+        seen = bool(item.get("in_image", True))      # True เฉพาะที่โมเดลภาพเห็นจริง
+        if ing in combined:
+            combined[ing]["prob"] = max(combined[ing]["prob"], prob)
+            combined[ing]["seen"] = combined[ing]["seen"] or seen
+        else:
+            combined[ing] = {"prob": prob, "seen": seen}
+
+    return combined
+
+
 def get_level_color(score, prob):
     if prob == 0:
         return "ไม่พบ", "gray"
@@ -147,8 +186,8 @@ def get_level_color(score, prob):
     else:
         return "ต่ำ", "green"
     
-def get_allergen(menu_name, allergen_level, custom_ingredients):
-    ingredients = get_ingredients(menu_name)
+def get_allergen(menu_name, allergen_level, custom_ingredients, detected=None):
+    combined = combine_ingredients(get_ingredients(menu_name), detected)
     
     ENG_FROM_THAI = {v: k for k, v in THAI_LABELS.items()}
     normalized_custom = {}
@@ -158,18 +197,20 @@ def get_allergen(menu_name, allergen_level, custom_ingredients):
     custom_ingredients = normalized_custom
     
     allergen_count = {}
-    
-    for item in ingredients:
-        ing = item["ingredient"]
-        prob = item["prob"]
+    allergen_seen = set()      # สารก่อภูมิแพ้ที่มาจากส่วนผสมที่เห็นในรูป
+
+    for ing, info in combined.items():
+        prob = info["prob"]
         allergen_list = ALLERGEN_MAPPING.get(ing, [])
-        
+
         for allergen in allergen_list:
             if allergen not in allergen_count:
                 allergen_count[allergen] = 0
             allergen_count[allergen] += prob
             if allergen_count[allergen] > 1:
                 allergen_count[allergen] = 1
+            if info["seen"]:
+                allergen_seen.add(allergen)
                 
     result = []
     
@@ -186,22 +227,24 @@ def get_allergen(menu_name, allergen_level, custom_ingredients):
  
         result.append({
             "name": allergen,
-            "thai": get_thai(allergen),
+            "thai": get_allergen_thai(allergen),
             "score": score,
             "prob": round(prob, 2),
             "level": level,
-            "color": color
+            "color": color,
+            "certainty": "confirmed" if allergen in allergen_seen else "possible"
         })
     
     for allergen, user_lv in allergen_level.items():
         if allergen not in allergen_count:
             result.append({
                 "name": allergen,
-                "thai": get_thai(allergen),
+                "thai": get_allergen_thai(allergen),
                 "prob": 0.0,
                 "score": 0,
                 "level": "ไม่พบ",
-                "color": "gray"
+                "color": "gray",
+                "certainty": None
             })
     
     matched_custom = set()
@@ -211,9 +254,8 @@ def get_allergen(menu_name, allergen_level, custom_ingredients):
     "medium": ("ปานกลาง", "orange"),
     "low":    ("ต่ำ",      "green")
 }
-    for item in ingredients:
-        ing = item["ingredient"]
-        prob = item["prob"]
+    for ing, info in combined.items():
+        prob = info["prob"]
         
         if ing in custom_ingredients:
             matched_custom.add(ing)
@@ -228,7 +270,8 @@ def get_allergen(menu_name, allergen_level, custom_ingredients):
                 "score": score,
                 "prob": round(prob, 2),
                 "level": level,
-                "color": color
+                "color": color,
+                "certainty": "confirmed" if info["seen"] else "possible"
             })
  
     for ing in custom_ingredients:
@@ -239,7 +282,8 @@ def get_allergen(menu_name, allergen_level, custom_ingredients):
                 "prob": 0.0,
                 "score": 0,
                 "level": "ไม่พบ",
-                "color": "gray"
+                "color": "gray",
+                "certainty": None
             })
  
     result.sort(key=lambda x: x["score"], reverse=True)
@@ -262,7 +306,7 @@ def get_overall_score(result):
     
 if __name__ == "__main__":
     allergen_level = {
-        "shellfish": "high",
+        "crustacean": "high",
         "peanut": "medium",
         "milk": "low",
     }
@@ -272,14 +316,21 @@ if __name__ == "__main__":
         "orange": "medium",
         "chicken": "high"
     }
-    menus = ["pad thai goong", "pad thai (chicken/pork)", "pad thai", "panang", "larbpork"]
+    menus = ["pad thai goong", "pad thai (chicken/pork)", "pad thai", "padthai", "panang", "larbpork"]
+    detected = [{"ingredient": "shrimp", "prob": 0.9}, {"ingredient": "peanut", "prob": 0.85}]   # ตัวอย่างผลจากโมเดลส่วนผสม
  
     for menu in menus:
-        items = get_allergen(menu, allergen_level, custom_ingredients)
+        items = get_allergen(menu, allergen_level, custom_ingredients, detected)
         overall_level, overall_color = get_overall_score(items)
         thai_name = get_menu_thai(menu)
  
         print(f"\n {thai_name} | ความเสี่ยงโดยรวม: {overall_level} color: {overall_color}")
        
         for item in items:
-            print(f"  {item['thai']:<25} score: {item['score']:<5} level: {item['level']:<10} color: {item['color']}")
+            print(f"  {item['thai']:<25} score: {item['score']:<5} level: {item['level']:<10} "
+                  f"{str(item.get('certainty')):<10} color: {item['color']}")
+
+    # เช็กว่าส่วนผสมที่โมเดลส่วนผสมทายได้ มีในตาราง ingredient → allergen ครบไหม
+    MODEL_ALLERGEN_INGREDIENTS = ["shrimp", "salted_crab", "squid", "mussel", "fish", "egg", "peanut"]
+    missing = [i for i in MODEL_ALLERGEN_INGREDIENTS if i not in ALLERGEN_MAPPING]
+    print("\nส่วนผสมจากโมเดลที่ไม่มีใน ingredients_allergen_mapping.json:", missing or "ไม่มี ✓")

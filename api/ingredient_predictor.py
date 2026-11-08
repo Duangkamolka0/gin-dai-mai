@@ -168,16 +168,17 @@ class IngredientPredictor:
 
         detected = []
 
-        for name, probability_value, threshold in zip(
+        for index, (name, probability_value, threshold) in enumerate(zip(
             self.classes,
             probability,
             thresholds
-        ):
+        )):
             if probability_value >= threshold:
                 detected.append({
                     "ingredient": name,
                     "prob": round(float(probability_value), 4),
-                    "allergen": self.ingredient_to_allergen.get(name)
+                    "allergen": self.ingredient_to_allergen.get(name),
+                    "in_image": bool(image_probability[index] >= self.image_thresholds[index])
                 })
 
         detected.sort(

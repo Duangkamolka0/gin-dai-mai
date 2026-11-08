@@ -1,7 +1,18 @@
 const presets = [
-  'นม', 'ไข่', 'ปลา', 'ข้าวสาลี', 'ถั่วลิสง', 
-  'ถั่วเหลือง', 'ถั่วเปลือกแข็ง', 'อาหารทะเลเปลือกแข็ง', 'งา', 'อื่นๆ'
+  'นม', 'ไข่', 'ปลา', 'ข้าวสาลี', 'ถั่วลิสง',
+  'ถั่วเหลือง', 'ถั่วเปลือกแข็ง', 'กุ้ง/ปู', 'หมึก/หอย', 'งา', 'อื่นๆ'
 ];
+
+// ส่วนผสมที่โมเดลเห็นในรูป → ชื่อสารก่อภูมิแพ้ (ใช้ไฮไลต์ส่วนผสมที่ผู้ใช้แพ้)
+const INGREDIENT_TO_ALLERGEN_TH = {
+  shrimp: 'กุ้ง/ปู',
+  salted_crab: 'กุ้ง/ปู',
+  squid: 'หมึก/หอย',
+  mussel: 'หมึก/หอย',
+  fish: 'ปลา',
+  egg: 'ไข่',
+  peanut: 'ถั่วลิสง'
+};
 
 const navigationEntries = window.performance.getEntriesByType("navigation");
 const isAbsoluteReload = navigationEntries.length > 0 && navigationEntries[0].type === "reload";
@@ -208,10 +219,11 @@ function renderResult() {
   const foodName = resultData.food_name_thai || "ไม่รู้จักเมนูอาหาร";
   const overallRisk = resultData.overall_risk || { level: "ความเสี่ยงต่ำ", color: "green" };
   const allergens = resultData.allergens || [];
+  const detectedIngredients = resultData.detected_ingredients || [];
 
-  let statusColor = "#1BCF93"; 
-  if (overallRisk.color === "orange" || overallRisk.level.includes("ปานกลาง")) statusColor = "#E6DF7C"; 
-  if (overallRisk.color === "red" || overallRisk.level.includes("สูง") || overallRisk.level.includes("มาก")) statusColor = "#FF5B5B"; 
+  let statusColor = "#1BCF93";
+  if (overallRisk.color === "orange" || overallRisk.level.includes("ปานกลาง")) statusColor = "#E6DF7C";
+  if (overallRisk.color === "red" || overallRisk.level.includes("สูง") || overallRisk.level.includes("มาก")) statusColor = "#FF5B5B";
 
   const activeUserAllergens = Object.keys(store).filter(item => {
     return item !== 'อื่นๆ' && store[item] !== 'ไม่แพ้';
@@ -226,47 +238,60 @@ function renderResult() {
     }
   });
 
+  const LEVEL_RANK = { "สูง": 0, "high": 0, "เสี่ยงมาก": 0,
+                       "ปานกลาง": 1, "medium": 1, "เสี่ยงปานกลาง": 1,
+                       "ต่ำ": 2, "low": 2, "เสี่ยงน้อย": 2 };
+                       
+  const levelRank = item => (item.level in LEVEL_RANK ? LEVEL_RANK[item.level] : 3);
+  const certaintyRank = item => (item.certainty === "confirmed" ? 0 : item.certainty === "possible" ? 1 : 2);
+  combinedAllergens.sort((a, b) =>
+    levelRank(a) - levelRank(b) ||
+    certaintyRank(a) - certaintyRank(b) ||
+    (b.score || 0) - (a.score || 0)
+  );
+
   let allergensHTML = "";
   if (combinedAllergens.length === 0) {
     allergensHTML = `<p style="color: #68A590; font-size: 15px; margin: 20px 0; text-align: center;">ไม่ได้เลือกสารก่อภูมิแพ้ที่ต้องการเฝ้าระวังไว้</p>`;
   } else {
     allergensHTML = combinedAllergens.map(item => {
-      let barColor = "#c0c0c0"; 
-      let barWidth = "12%";     
+      let barColor = "#c0c0c0";
+      let barWidth = "12%";
       let displayLevel = "ไม่พบ";
-      let labelColor = "#8BA196"; 
-      let levelTextColor = "#c0c0c0"; 
+      let labelColor = "#8BA196";
+      let levelTextColor = "#c0c0c0";
 
-      if (item.level === "สูง" || item.level === "high" || item.level === "เสี่ยงมาก") { 
+      if (item.level === "สูง" || item.level === "high" || item.level === "เสี่ยงมาก") {
         barColor = "#FF5B5B";
-        barWidth = "100%"; 
+        barWidth = "100%";
         displayLevel = "เสี่ยงมาก";
         labelColor = "#FFFFFF";
         levelTextColor = "#FF5B5B";
-      } else if (item.level === "ปานกลาง" || item.level === "medium" || item.level === "เสี่ยงปานกลาง") { 
+      } else if (item.level === "ปานกลาง" || item.level === "medium" || item.level === "เสี่ยงปานกลาง") {
         barColor = "#E6DF7C";
-        barWidth = "60%"; 
+        barWidth = "60%";
         displayLevel = "เสี่ยงปานกลาง";
         labelColor = "#FFFFFF";
         levelTextColor = "#E6DF7C";
       } else if (item.level === "ต่ำ" || item.level === "low" || item.level === "เสี่ยงน้อย") {
         barColor = "#1BCF93";
-        barWidth = "30%"; 
+        barWidth = "30%";
         displayLevel = "เสี่ยงน้อย";
         labelColor = "#FFFFFF";
         levelTextColor = "#1BCF93";
-      } else if (item.level === "ไม่พบ" || item.level === "none") {
-        barColor = "#c0c0c0";
-        barWidth = "12%"; 
-        displayLevel = "ไม่พบ";
-        labelColor = "#8BA196"; 
-        levelTextColor = "#c0c0c0"; 
+      }
+
+      let certaintyBadge = "";
+      if (item.certainty === "confirmed") {
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 15px; border-radius: 8px; background: rgba(255, 91, 91, 0.15); color: #FF5B5B; border: 1px solid rgba(255, 91, 91, 0.4);">พบในรูป</span>`;
+      } else if (item.certainty === "possible") {
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 15px; border-radius: 8px; background: rgba(230, 223, 124, 0.12); color: #E6DF7C; border: 1px solid rgba(230, 223, 124, 0.4);">อาจมีในสูตร</span>`;
       }
 
       return `
         <div style="margin-bottom: 18px; text-align: left;">
-          <div style="display: flex; justify-content: space-between; font-size: 16px; margin-bottom: 6px; font-family: 'Sarabun', sans-serif;">
-            <span style="color: ${labelColor}; font-weight: 400;">${item.name}</span>
+          <div style="display: flex; justify-content: space-between; align-items: center; font-size: 16px; margin-bottom: 6px; font-family: 'Sarabun', sans-serif;">
+            <span style="color: ${labelColor}; font-weight: 400;">${item.name}${certaintyBadge}</span>
             <span style="color: ${levelTextColor}; font-weight: 500;">${displayLevel}</span>
           </div>
           <div style="width: 100%; height: 5px; background: #1B2B23; border-radius: 10px;">
@@ -277,26 +302,59 @@ function renderResult() {
     }).join('');
   }
 
+
+  let ingredientsHTML = "";
+  if (detectedIngredients.length === 0) {
+    ingredientsHTML = `<p style="color: #68A590; font-size: 14px; margin: 0 0 8px 0;">ไม่พบส่วนผสมที่มองเห็นได้ชัดเจน</p>`;
+  } else {
+    const isAllergic = ing => {
+      const allergenName = INGREDIENT_TO_ALLERGEN_TH[ing.ingredient];
+      return allergenName && activeUserAllergens.includes(allergenName) ? 1 : 0;
+    };
+    const sortedIngredients = [...detectedIngredients].sort((a, b) =>
+      isAllergic(b) - isAllergic(a) || b.prob - a.prob
+    );
+
+    ingredientsHTML = sortedIngredients.map(ing => {
+      const allergenName = INGREDIENT_TO_ALLERGEN_TH[ing.ingredient];
+      const userIsAllergic = allergenName && activeUserAllergens.includes(allergenName);
+
+      const border = userIsAllergic ? '#FF5B5B' : '#29443B';
+      const nameColor = userIsAllergic ? '#FF5B5B' : '#FFFFFF';
+      const warn = userIsAllergic ? '' : '';
+
+      return `
+        <span title="${ing.ingredient}" style="display: inline-flex; align-items: center; padding: 6px 12px; margin: 0 6px 8px 0; border-radius: 14px; background: #1B2B23; border: 1px solid ${border}; font-size: 14px;">
+          <span style="color: ${nameColor};">${ing.thai}${warn}</span>
+        </span>
+      `;
+    }).join('');
+  }
+
+  const sectionTitleStyle = "font-size: 14px; color: #68A590; font-weight: 400; border-bottom: 1px solid #29443B; padding-bottom: 8px; margin-top: 0; margin-bottom: 16px; letter-spacing: 0.5px; text-align: left;";
+
   resultsEl.innerHTML = `
     <div style="width: 100%; font-family: 'Sarabun', sans-serif; padding: 5px 0;">
-      
+
       <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: bold; color: white; margin-top: 0; margin-bottom: 18px; text-align: left;">
         เมนู: <span style="color: #1BCF93; font-family: 'Sarabun', sans-serif; font-weight: 500;">${foodName}</span>
       </h3>
-      
+
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 24px; padding: 12px 16px; background: #1B2B23; border-radius: 12px; border: 1px solid rgba(41, 68, 59, 0.5); text-align: left;">
         <div style="width: 10px; height: 10px; background: ${statusColor}; border-radius: 50%;"></div>
         <span style="font-size: 16px; font-weight: 500; color: ${statusColor}">ประเมินภาพรวม: ${overallRisk.level}</span>
       </div>
 
-      <h4 style="font-size: 14px; color: #68A590; font-weight: 400; border-bottom: 1px solid #29443B; padding-bottom: 8px; margin-top: 0; margin-bottom: 20px; letter-spacing: 0.5px; text-align: left;">
-        สารก่อภูมิแพ้ที่ตรวจพบ:
-      </h4>
-      
+      <h4 style="${sectionTitleStyle}">ส่วนผสมที่ตรวจพบในรูป:</h4>
+      <div style="width: 100%; text-align: left; margin-bottom: 20px;">
+        ${ingredientsHTML}
+      </div>
+
+      <h4 style="${sectionTitleStyle}">สารก่อภูมิแพ้ที่ตรวจพบ:</h4>
       <div style="width: 100%;">
         ${allergensHTML}
       </div>
-      
+
     </div>
   `;
 }

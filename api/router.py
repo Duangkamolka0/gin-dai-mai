@@ -1,5 +1,5 @@
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException
-from .model import predict_food_from_bytes
+from .model import predict_food_from_bytes, predict_ingredients_from_bytes
 from .scorer import analyze_allergens
 from .schemas import AllergenResponse
 import json
@@ -9,15 +9,15 @@ router = APIRouter(prefix="/api/v1", tags=["allergen"])
 @router.post("/allergen", response_model=AllergenResponse)
 async def get_allergen(
     file: UploadFile = File(...),
-    user_data: str = Form("{}")  #  เพิ่มตรงนี้เพื่อดักรับก่อนข้อมูลคนแพ้ที่ api.js ส่งมา
+    user_data: str = Form("{}")  # ข้อมูลคนแพ้ที่ api.js ส่งมา
 ):
     # ตรวจสอบประเภทไฟล์
     if not file.content_type or not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="กรุณาอัปโหลดไฟล์รูปภาพเท่านั้น")
-    
+
     # อ่านไฟล์รูปภาพออกมาเป็น Bytes
     image_bytes = await file.read()
-    
+
     # แปลงก้อนข้อมูล JSON String จาก Frontend กลับเป็น Python Dictionary
     try:
         allergy_data = json.loads(user_data)
@@ -27,23 +27,28 @@ async def get_allergen(
         allergen_level = {}
         custom_ingredients = {}
 
-    # 🚀 Step 1: ทำการจำแนกเมนูอาหารจากรูปภาพ (Food Recognition)
+    # Step 1: จำแนกเมนูอาหารจากรูปภาพ (Food Recognition)
     prediction = predict_food_from_bytes(image_bytes)
     class_name = prediction["name"]
     confidence = prediction["confidence"]
-    
-    # 🚀 Step 2: ประเมินคะแนนความเสี่ยงสารก่อภูมิแพ้ โดยส่งข้อมูลความเสี่ยงของผู้ใช้เข้าไปคำนวณจริง
+
+    # Step 2: ทายส่วนผสมจากรูป รวมกับสูตรเฉลี่ยของเมนูหลักที่ทายได้ (Ingredient Prediction)
+    ingredients = predict_ingredients_from_bytes(image_bytes, dish=prediction["family"])
+
+    # Step 3: ประเมินคะแนนความเสี่ยง (ส่วนผสมที่เห็นในรูป = พบแน่นอน, จากสูตรเมนู = อาจมี)
     result = analyze_allergens(
-        food_name=class_name, 
-        allergen_level=allergen_level, 
-        custom_ingredients=custom_ingredients
+        food_name=class_name,
+        allergen_level=allergen_level,
+        custom_ingredients=custom_ingredients,
+        detected=ingredients["detected"]
     )
-    
+
     # ส่งผลลัพธ์กลับไปยังหน้าเว็บ (Frontend)
     return AllergenResponse(
         food_name=class_name,
         food_name_thai=result["food_name_thai"],
         confidence=round(confidence, 4),
         overall_risk=result["overall_risk"],
-        allergens=result["allergens"]
+        allergens=result["allergens"],
+        detected_ingredients=result["detected_ingredients"],
     )
