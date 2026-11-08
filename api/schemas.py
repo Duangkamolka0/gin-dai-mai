@@ -7,6 +7,7 @@ class IngredientItem(BaseModel):
     ingredient: str      # ชื่ออังกฤษ เช่น "shrimp"
     thai: str            # ชื่อไทย เช่น "กุ้ง"
     prob: float          # ความมั่นใจ 0–1
+    in_image: bool = True
     
 class AllergenItem(BaseModel):
     name: str

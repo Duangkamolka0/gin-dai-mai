@@ -25,7 +25,12 @@ def analyze_allergens(food_name: str, allergen_level: dict = None, custom_ingred
         "overall_risk": {"level": overall_level, "color": overall_color},
         "allergens": allergens,
         "detected_ingredients": [
-            {"ingredient": d["ingredient"], "thai": get_thai(d["ingredient"]), "prob": d["prob"]}
+            {
+                "ingredient": d["ingredient"],
+                "thai": get_thai(d["ingredient"]),
+                "prob": d["prob"],
+                "in_image": d.get("in_image", True),
+            }
             for d in (detected or [])
         ],
     }

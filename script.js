@@ -321,8 +321,9 @@ function renderResult() {
     `;
   };
 
-  const seenIngredients = detectedIngredients;
-  const likelyIngredients = [];
+  // แยก 2 แถว: โมเดลภาพเห็นจริง / มองเห็นไม่ชัดแต่เมนูนี้มักใส่
+  const seenIngredients = detectedIngredients.filter(ing => ing.in_image !== false);
+  const likelyIngredients = detectedIngredients.filter(ing => ing.in_image === false);
   const subLabelStyle = "font-size: 13px; color: #68A590; margin: 0 0 8px 0;";
 
   let ingredientsHTML = "";
