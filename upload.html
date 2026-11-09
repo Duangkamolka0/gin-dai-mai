@@ -5,10 +5,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>อัปโหลดรูป</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+/* ซ่อนหน้าต่าง Modal ตั้งแต่เริ่มเปิดหน้า */
+#imageChoiceModal,
+#cameraModal {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 99999 !important;
+    background: rgba(0, 0, 0, 0.8) !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* แสดงเมื่อ JavaScript เพิ่ม is-open */
+#imageChoiceModal.is-open,
+#cameraModal.is-open {
+    display: flex !important;
+}
+
+/* กล่องเนื้อหาด้านใน */
+#imageChoiceModal .image-choice-dialog,
+#cameraModal .camera-dialog {
+    width: 100%;
+    max-width: 500px;
+    padding: 25px;
+    border-radius: 20px;
+    background: #10271f;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* ปุ่มเลือกภาพ */
+#imageChoiceModal .image-choice-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#imageChoiceModal .image-choice-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 30px;
+    background: #19c99a;
+    color: #10271f;
+    cursor: pointer;
+}
+
+/* ภาพจากกล้อง */
+#cameraModal video {
+    display: block;
+    width: 100%;
+    max-height: 65vh;
+    object-fit: contain;
+    border-radius: 15px;
+}
+</style>
 </head>
+
 <body class="bg">
+
   <header class="navbar">
     <div class="logo">GINDAIMAI</div>
+
     <div class="nav-link-group">
       <div class="nav-link" onclick="location.href='index.html'">
         หน้าหลัก
@@ -17,32 +81,309 @@
   </header>
 
   <main class="split">
+
     <section class="left">
       <h2>ถ่ายรูป <span>อาหาร</span></h2>
       <p>ถ่ายรูปหรืออัปโหลดภาพอาหารที่ต้องการนำมาวิเคราะห์</p>
     </section>
 
     <section class="upload-section">
-      <label class="upload-box" id="uploadBox">
-        <input
-          id="imageInput"
-          type="file"
-          accept="image/*"
-          capture="environment"
-          hidden
-          onchange="previewImage(event)"
-        >
-        <img src="assets/camera.png" alt="camera" class="camera-img" id="cameraIcon">
-        <p id="uploadText">ถ่ายรูปหรืออัปโหลดรูปภาพอาหารที่ต้องการ</p>
-      </label>
 
-      <button id="nextBtn" type="button" class="next-btn" onclick="startAnalysis(event)">
+      <!-- ช่องเลือกรูปจากไฟล์ -->
+      <input
+        id="imageInput"
+        type="file"
+        accept="image/*"
+        hidden
+        onchange="previewImage(event)"
+      >
+
+      <!-- กรอบอัปโหลด -->
+      <div
+        class="upload-box"
+        id="uploadBox"
+        onclick="openImageChoice()"
+      >
+        <img
+          src="assets/camera.png"
+          alt="camera"
+          class="camera-img"
+          id="cameraIcon"
+        >
+
+        <p id="uploadText">
+          ถ่ายรูปหรืออัปโหลดรูปภาพอาหารที่ต้องการ
+        </p>
+      </div>
+
+      <button
+        id="nextBtn"
+        type="button"
+        class="next-btn"
+        onclick="startAnalysis(event)"
+      >
         เริ่มวิเคราะห์
       </button>
+
     </section>
   </main>
 
+  <!-- หน้าต่างเลือกวิธีเพิ่มรูป -->
+  <div
+    class="image-choice-overlay"
+    id="imageChoiceModal"
+    onclick="closeImageChoiceFromBackdrop(event)"
+  >
+    <div class="image-choice-dialog">
+
+      <h3>เพิ่มรูปภาพอาหาร</h3>
+      <p>เลือกรูปแบบที่ต้องการ</p>
+
+      <div class="image-choice-actions">
+
+        <button
+          type="button"
+          class="image-choice-btn"
+          onclick="chooseImageFile()"
+        >
+          <strong>เลือกรูปจากไฟล์</strong>
+        </button>
+
+        <button
+          type="button"
+          class="image-choice-btn"
+          onclick="openCamera()"
+        >
+          <strong>ถ่ายรูปอาหาร</strong>
+        </button>
+
+      </div>
+
+      <button
+        type="button"
+        class="image-choice-cancel"
+        onclick="closeImageChoice()"
+      >
+        ยกเลิก
+      </button>
+
+    </div>
+  </div>
+
+  <!-- หน้าต่างกล้อง -->
+  <div
+    class="image-choice-overlay"
+    id="cameraModal"
+    onclick="closeCameraFromBackdrop(event)"
+  >
+    <div class="image-choice-dialog camera-dialog">
+
+      <h3>ถ่ายรูปอาหาร</h3>
+
+      <video
+        id="cameraVideo"
+        autoplay
+        playsinline
+      ></video>
+
+      <div class="camera-actions">
+
+        <button
+          type="button"
+          class="image-choice-btn camera-capture-btn"
+          onclick="capturePhoto()"
+        >
+          ถ่ายภาพ
+        </button>
+
+        <button
+          type="button"
+          class="image-choice-cancel"
+          onclick="closeCamera()"
+        >
+          ยกเลิก
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+  <canvas id="cameraCanvas" hidden></canvas>
+
+  <!-- ระบบเลือกไฟล์และกล้อง -->
+  <script>
+    let cameraStream = null;
+
+    // เปิดหน้าต่างเลือกวิธีเพิ่มรูป
+    function openImageChoice() {
+      document
+        .getElementById("imageChoiceModal")
+        .classList.add("is-open");
+    }
+
+    // ปิดหน้าต่างเลือกวิธีเพิ่มรูป
+    function closeImageChoice() {
+      document
+        .getElementById("imageChoiceModal")
+        .classList.remove("is-open");
+    }
+
+    // คลิกพื้นที่ด้านนอกเพื่อปิดหน้าต่าง
+    function closeImageChoiceFromBackdrop(event) {
+      if (event.target.id === "imageChoiceModal") {
+        closeImageChoice();
+      }
+    }
+
+    // เลือกรูปจากไฟล์
+    function chooseImageFile() {
+      closeImageChoice();
+
+      document.getElementById("imageInput").click();
+    }
+
+    // เปิดกล้องสด
+    async function openCamera() {
+      closeImageChoice();
+
+      if (
+        !navigator.mediaDevices ||
+        !navigator.mediaDevices.getUserMedia
+      ) {
+        alert(
+          "ไม่สามารถเปิดกล้องได้ กรุณาเปิดเว็บผ่าน localhost หรือ HTTPS"
+        );
+        return;
+      }
+
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: "environment" }
+          },
+          audio: false
+        });
+
+        const video = document.getElementById("cameraVideo");
+
+        video.srcObject = cameraStream;
+
+        document
+          .getElementById("cameraModal")
+          .classList.add("is-open");
+
+        await video.play();
+
+      } catch (error) {
+        console.error("Camera error:", error);
+
+        if (
+          error.name === "NotAllowedError" ||
+          error.name === "PermissionDeniedError"
+        ) {
+          alert(
+            "ไม่ได้รับอนุญาตให้ใช้กล้อง กรุณากด Allow เพื่ออนุญาต"
+          );
+        } else if (
+          error.name === "NotFoundError" ||
+          error.name === "DevicesNotFoundError"
+        ) {
+          alert("ไม่พบกล้องที่เชื่อมต่อกับอุปกรณ์นี้");
+        } else {
+          alert(
+            "เปิดกล้องไม่สำเร็จ กรุณาตรวจสอบกล้องและสิทธิ์การใช้งาน"
+          );
+        }
+
+        closeCamera();
+      }
+    }
+
+    // ปิดกล้องและหยุดการใช้งานกล้อง
+    function closeCamera() {
+      if (cameraStream) {
+        cameraStream.getTracks().forEach(track => {
+          track.stop();
+        });
+
+        cameraStream = null;
+      }
+
+      const video = document.getElementById("cameraVideo");
+
+      if (video) {
+        video.srcObject = null;
+      }
+
+      document
+        .getElementById("cameraModal")
+        .classList.remove("is-open");
+    }
+
+    // คลิกด้านนอกเพื่อปิดหน้าต่างกล้อง
+    function closeCameraFromBackdrop(event) {
+      if (event.target.id === "cameraModal") {
+        closeCamera();
+      }
+    }
+
+    // ถ่ายภาพจากกล้อง
+    function capturePhoto() {
+      const video = document.getElementById("cameraVideo");
+      const canvas = document.getElementById("cameraCanvas");
+
+      if (!video.videoWidth || !video.videoHeight) {
+        alert("กล้องยังไม่พร้อม กรุณารอสักครู่");
+        return;
+      }
+
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
+
+      const context = canvas.getContext("2d");
+
+      context.drawImage(
+        video,
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+      canvas.toBlob(blob => {
+        if (!blob) {
+          alert("ไม่สามารถบันทึกรูปภาพได้");
+          return;
+        }
+
+        const file = new File(
+          [blob],
+          "food-photo.jpg",
+          {
+            type: "image/jpeg",
+            lastModified: Date.now()
+          }
+        );
+
+        const dataTransfer = new DataTransfer();
+
+        dataTransfer.items.add(file);
+
+        const input = document.getElementById("imageInput");
+
+        input.files = dataTransfer.files;
+
+        closeCamera();
+
+        // ใช้ฟังก์ชันแสดงตัวอย่างรูปเดิม
+        previewImage({ target: input });
+
+      }, "image/jpeg", 0.92);
+    }
+  </script>
+
   <script src="api.js"></script>
   <script src="script.js"></script>
+
 </body>
 </html>
