@@ -72,6 +72,7 @@ function removeItem(name) {
     renderSelect();
   }
 }
+
 function setLevel(name, value) {
   store[name] = value;
   saveData();
@@ -144,10 +145,8 @@ function renderSelect() {
         return `
           <div class="selected-row" style="margin-bottom: 16px; border-bottom: 1px solid rgba(41, 68, 59, 0.5); padding-bottom: 14px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-              <!-- ฝั่งซ้าย: แสดงชื่ออาหารชัดเจน ไม่มีปุ่มเกะกะสายตา -->
               <span class="item-name" style="font-size: 16px; color: #FFFFFF; font-weight: 400; letter-spacing: 0.3px;">${item}</span>
 
-              <!-- ฝั่งขวา: รวม Dropdown เลือกระดับ + ปุ่มกากบาทวงกลมมินิมอล -->
               <div style="display: flex; align-items: center; gap: 8px;">
                 <select onchange="updateRowLevel('${item}', this)" 
                         style="background: #15241D; color: #8BA196; border: 1px solid #29443B; border-radius: 8px; font-size: 13px; padding: 4px 10px; cursor: pointer; outline: none; transition: 0.2s;">
@@ -165,7 +164,6 @@ function renderSelect() {
               </div>
             </div>
 
-            <!-- แถบ Progress Bar -->
             <div style="width: 100%; height: 5px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden;">
               <div class="progress-bar" style="width: ${width}; height: 100%; background: ${color}; border-radius: 10px; transition: 0.3s ease;"></div>
             </div>
@@ -256,12 +254,19 @@ function renderResult() {
     }
   });
 
-  // เรียงตามความเสี่ยง: สูง → ปานกลาง → ต่ำ → ไม่พบ (ระดับเท่ากัน: พบในรูปก่อน แล้วคะแนนมากก่อน)
-  const LEVEL_RANK = { "สูง": 0, "high": 0, "เสี่ยงมาก": 0,
-                       "ปานกลาง": 1, "medium": 1, "เสี่ยงปานกลาง": 1,
-                       "ต่ำ": 2, "low": 2, "เสี่ยงน้อย": 2 };
-  const levelRank = item => (item.level in LEVEL_RANK ? LEVEL_RANK[item.level] : 3);
+  // เรียงลำดับ: เช็คจากระดับความเสี่ยงของผู้ใช้ (store) หรือ AI -> พบในรูป -> คะแนน
+  const LEVEL_RANK = { 
+    "สูง": 0, "high": 0, "เสี่ยงมาก": 0, "อาการรุนแรง": 0,
+    "ปานกลาง": 1, "medium": 1, "เสี่ยงปานกลาง": 1, "อาการปานกลาง": 1,
+    "ต่ำ": 2, "low": 2, "เสี่ยงน้อย": 2, "อาการเล็กน้อย": 2 
+  };
+  
+  const levelRank = item => {
+    const targetLevel = store[item.name] || item.level;
+    return targetLevel in LEVEL_RANK ? LEVEL_RANK[targetLevel] : 3;
+  };
   const certaintyRank = item => (item.certainty === "confirmed" ? 0 : item.certainty === "possible" ? 1 : 2);
+  
   combinedAllergens.sort((a, b) =>
     levelRank(a) - levelRank(b) ||
     certaintyRank(a) - certaintyRank(b) ||
@@ -275,41 +280,38 @@ function renderResult() {
     allergensHTML = `<p style="color: #68A590; font-size: 15px; margin: 20px 0; text-align: center;">ไม่ได้เลือกสารก่อภูมิแพ้ที่ต้องการเฝ้าระวังไว้</p>`;
   } else {
     allergensHTML = combinedAllergens.map(item => {
-      let barColor = "#c0c0c0";
       let barWidth = "12%";
       let displayLevel = "ไม่พบ";
-      let labelColor = "#8BA196";
-      let levelTextColor = "#c0c0c0";
 
-      // กำหนดระดับความเสี่ยงและความยาวแถบเหมือนเดิม
-      if (item.level === "สูง" || item.level === "high" || item.level === "เสี่ยงมาก") {
+      // ดึงระดับความรุนแรงที่ผู้ใช้เลือกไว้ในหน้าแรก (store) มาแสดง
+      const effectiveLevel = store[item.name] || item.level;
+
+      if (effectiveLevel === "สูง" || effectiveLevel === "high" || effectiveLevel === "เสี่ยงมาก" || effectiveLevel === "อาการรุนแรง") {
         barWidth = "100%";
         displayLevel = "เสี่ยงมาก";
-      } else if (item.level === "ปานกลาง" || item.level === "medium" || item.level === "เสี่ยงปานกลาง") {
+      } else if (effectiveLevel === "ปานกลาง" || effectiveLevel === "medium" || effectiveLevel === "เสี่ยงปานกลาง" || effectiveLevel === "อาการปานกลาง") {
         barWidth = "60%";
         displayLevel = "เสี่ยงปานกลาง";
-      } else if (item.level === "ต่ำ" || item.level === "low" || item.level === "เสี่ยงน้อย") {
+      } else if (effectiveLevel === "ต่ำ" || effectiveLevel === "low" || effectiveLevel === "เสี่ยงน้อย" || effectiveLevel === "อาการเล็กน้อย") {
         barWidth = "30%";
         displayLevel = "เสี่ยงน้อย";
       }
 
-      // เปลี่ยนเฉพาะสีตามความแน่นอนในการตรวจพบ
+      // โทนสี: พบในรูป = สีแดง, อาจมีในสูตร = สีเหลือง
+      let barColor = "#465951";
+      let levelTextColor = "#8BA196";
+      let labelColor = "#8BA196";
+      let certaintyBadge = "";
+
       if (item.certainty === "confirmed") {
         barColor = "#FF5B5B";
         levelTextColor = "#FF5B5B";
         labelColor = "#FFFFFF";
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 69, 69, 0.15); color: #FF4545; border: 1px solid rgba(255, 69, 69, 0.4);">พบในรูป</span>`;
       } else if (item.certainty === "possible") {
         barColor = "#E6DF7C";
         levelTextColor = "#E6DF7C";
         labelColor = "#FFFFFF";
-      }
-
-      // ป้ายบอกที่มา
-      let certaintyBadge = "";
-
-      if (item.certainty === "confirmed") {
-        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 69, 69, 0.15); color: #FF4545; border: 1px solid rgba(255, 69, 69, 0.4);">พบในรูป</span>`;
-      } else if (item.certainty === "possible") {
         certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 213, 79, 0.12); color: #FFD54F; border: 1px solid rgba(255, 213, 79, 0.4);">อาจมีในสูตร</span>`;
       }
 
@@ -326,7 +328,6 @@ function renderResult() {
       `;
     }).join('');
   }
-
 
   // ---------- ส่วนผสม: แยก "พบในรูป" กับ "น่าจะมี" ----------
   const makeChip = (ing, likely) => {
@@ -345,7 +346,6 @@ function renderResult() {
     `;
   };
 
-  // แยก 2 แถว: โมเดลภาพเห็นจริง / มองเห็นไม่ชัดแต่เมนูนี้มักใส่
   const seenIngredients = detectedIngredients.filter(ing => ing.in_image !== false);
   const likelyIngredients = detectedIngredients.filter(ing => ing.in_image === false);
   const subLabelStyle = "font-size: 13px; color: #68A590; margin: 0 0 8px 0;";
