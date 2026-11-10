@@ -65,6 +65,13 @@ function addCustom() {
   }
 }
 
+function removeItem(name) {
+  if (store[name]) {
+    delete store[name];
+    saveData();
+    renderSelect();
+  }
+}
 function setLevel(name, value) {
   store[name] = value;
   saveData();
@@ -83,10 +90,10 @@ function updateRowLevel(name, selectEl) {
         bar.style.background = '#FF5B5B';
       } else if (val === 'เสี่ยงปานกลาง') {
         bar.style.width = '60%';
-        bar.style.background = '#E6DF7C';
+        bar.style.background = '#f89d53';
       } else {
         bar.style.width = '30%';
-        bar.style.background = '#1BCF93';
+        bar.style.background = '#E6DF7C';
       }
     }
   }
@@ -123,33 +130,44 @@ function renderSelect() {
     } else {
       selectedItemsEl.innerHTML = selectedKeys.map(item => {
         let level = store[item] || 'เสี่ยงมาก'; 
-        let color = '#1BCF93';
-        let width = '30%';
+        let color = '#FF5B5B';
+        let width = '100%';
 
         if (level === 'เสี่ยงปานกลาง' || level === 'อาการปานกลาง') { 
-          color = '#E6DF7C'; 
+          color = '#f89d53'; 
           width = '60%'; 
-        } else if (level === 'เสี่ยงมาก' || level === 'อาการรุนแรง') { 
-          color = '#FF5B5B'; 
-          width = '100%'; 
         } else if (level === 'เสี่ยงน้อย' || level === 'อาการเล็กน้อย') {
-          color = '#1BCF93';
+          color = '#E6DF7C';
           width = '30%';
         }
 
         return `
-          <div class="selected-row" style="margin-bottom: 20px; border-bottom: 1px solid #29443B; padding-bottom: 15px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <span class="item-name" style="font-size: 18px; color: white;">${item}</span>
-              <select onchange="updateRowLevel('${item}', this)" 
-                      style="background: #1B2B23; color: #68A590; border: 1px solid #29443B; border-radius: 5px; font-size: 14px; padding: 4px 8px; cursor: pointer;">
-                <option value="เสี่ยงมาก" ${level === 'เสี่ยงมาก' || level === 'อาการรุนแรง' ? 'selected' : ''}>เสี่ยงมาก</option>
-                <option value="เสี่ยงปานกลาง" ${level === 'เสี่ยงปานกลาง' || level === 'อาการปานกลาง' ? 'selected' : ''}>เสี่ยงปานกลาง</option>
-                <option value="เสี่ยงน้อย" ${level === 'เสี่ยงน้อย' || level === 'อาการเล็กน้อย' ? 'selected' : ''}>เสี่ยงน้อย</option>
-              </select>
+          <div class="selected-row" style="margin-bottom: 16px; border-bottom: 1px solid rgba(41, 68, 59, 0.5); padding-bottom: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+              <!-- ฝั่งซ้าย: แสดงชื่ออาหารชัดเจน ไม่มีปุ่มเกะกะสายตา -->
+              <span class="item-name" style="font-size: 16px; color: #FFFFFF; font-weight: 400; letter-spacing: 0.3px;">${item}</span>
+
+              <!-- ฝั่งขวา: รวม Dropdown เลือกระดับ + ปุ่มกากบาทวงกลมมินิมอล -->
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <select onchange="updateRowLevel('${item}', this)" 
+                        style="background: #15241D; color: #8BA196; border: 1px solid #29443B; border-radius: 8px; font-size: 13px; padding: 4px 10px; cursor: pointer; outline: none; transition: 0.2s;">
+                  <option value="เสี่ยงมาก" ${level === 'เสี่ยงมาก' || level === 'อาการรุนแรง' ? 'selected' : ''}>เสี่ยงมาก</option>
+                  <option value="เสี่ยงปานกลาง" ${level === 'เสี่ยงปานกลาง' || level === 'อาการปานกลาง' ? 'selected' : ''}>เสี่ยงปานกลาง</option>
+                  <option value="เสี่ยงน้อย" ${level === 'เสี่ยงน้อย' || level === 'อาการเล็กน้อย' ? 'selected' : ''}>เสี่ยงน้อย</option>
+                </select>
+
+                <button type="button" onclick="removeItem('${item}')" title="ลบรายการ"
+                        onmouseover="this.style.background='rgba(255, 91, 91, 0.25)'; this.style.borderColor='#FF5B5B'"
+                        onmouseout="this.style.background='rgba(255, 91, 91, 0.1)'; this.style.borderColor='rgba(255, 91, 91, 0.35)'"
+                        style="width: 26px; height: 26px; border-radius: 50%; border: 1px solid rgba(255, 91, 91, 0.35); background: rgba(255, 91, 91, 0.1); color: #FF5B5B; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 12px; transition: 0.2s; padding: 0; outline: none;">
+                  ✕
+                </button>
+              </div>
             </div>
-            <div style="width: 100%; height: 6px; background: #1B2B23; border-radius: 10px;">
-              <div class="progress-bar" style="width: ${width}; height: 100%; background: ${color}; border-radius: 10px; transition: 0.3s;"></div>
+
+            <!-- แถบ Progress Bar -->
+            <div style="width: 100%; height: 5px; background: rgba(255, 255, 255, 0.05); border-radius: 10px; overflow: hidden;">
+              <div class="progress-bar" style="width: ${width}; height: 100%; background: ${color}; border-radius: 10px; transition: 0.3s ease;"></div>
             </div>
           </div>
         `;
@@ -252,6 +270,7 @@ function renderResult() {
 
   // ---------- สารก่อภูมิแพ้ ----------
   let allergensHTML = "";
+
   if (combinedAllergens.length === 0) {
     allergensHTML = `<p style="color: #68A590; font-size: 15px; margin: 20px 0; text-align: center;">ไม่ได้เลือกสารก่อภูมิแพ้ที่ต้องการเฝ้าระวังไว้</p>`;
   } else {
@@ -262,32 +281,36 @@ function renderResult() {
       let labelColor = "#8BA196";
       let levelTextColor = "#c0c0c0";
 
+      // กำหนดระดับความเสี่ยงและความยาวแถบเหมือนเดิม
       if (item.level === "สูง" || item.level === "high" || item.level === "เสี่ยงมาก") {
-        barColor = "#FF5B5B";
         barWidth = "100%";
         displayLevel = "เสี่ยงมาก";
-        labelColor = "#FFFFFF";
-        levelTextColor = "#FF5B5B";
       } else if (item.level === "ปานกลาง" || item.level === "medium" || item.level === "เสี่ยงปานกลาง") {
-        barColor = "#E6DF7C";
         barWidth = "60%";
         displayLevel = "เสี่ยงปานกลาง";
-        labelColor = "#FFFFFF";
-        levelTextColor = "#E6DF7C";
       } else if (item.level === "ต่ำ" || item.level === "low" || item.level === "เสี่ยงน้อย") {
-        barColor = "#1BCF93";
         barWidth = "30%";
         displayLevel = "เสี่ยงน้อย";
-        labelColor = "#FFFFFF";
-        levelTextColor = "#1BCF93";
       }
 
-      // ป้ายบอกที่มา: เห็นในรูป หรือ มาจากสูตรของเมนูนี้
-      let certaintyBadge = "";
+      // เปลี่ยนเฉพาะสีตามความแน่นอนในการตรวจพบ
       if (item.certainty === "confirmed") {
-        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 91, 91, 0.15); color: #FF5B5B; border: 1px solid rgba(255, 91, 91, 0.4);">พบในรูป</span>`;
+        barColor = "#FF5B5B";
+        levelTextColor = "#FF5B5B";
+        labelColor = "#FFFFFF";
       } else if (item.certainty === "possible") {
-        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(230, 223, 124, 0.12); color: #E6DF7C; border: 1px solid rgba(230, 223, 124, 0.4);">อาจมีในสูตร</span>`;
+        barColor = "#E6DF7C";
+        levelTextColor = "#E6DF7C";
+        labelColor = "#FFFFFF";
+      }
+
+      // ป้ายบอกที่มา
+      let certaintyBadge = "";
+
+      if (item.certainty === "confirmed") {
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 69, 69, 0.15); color: #FF4545; border: 1px solid rgba(255, 69, 69, 0.4);">พบในรูป</span>`;
+      } else if (item.certainty === "possible") {
+        certaintyBadge = `<span style="font-size: 12px; padding: 2px 8px; margin-left: 8px; border-radius: 8px; background: rgba(255, 213, 79, 0.12); color: #FFD54F; border: 1px solid rgba(255, 213, 79, 0.4);">อาจมีในสูตร</span>`;
       }
 
       return `
@@ -303,6 +326,7 @@ function renderResult() {
       `;
     }).join('');
   }
+
 
   // ---------- ส่วนผสม: แยก "พบในรูป" กับ "น่าจะมี" ----------
   const makeChip = (ing, likely) => {
